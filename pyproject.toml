@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools >= 64", "setuptools-git-versioning >= 2.0, < 3"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "edsdk_wrapper"
+version = "0.1.0"
+
+[tool.setuptools.packages.find]
+where = ["edsdk-wrapper"]
+
+[tool.setuptools.package-data]
+edsdk_wrapper = [
+	"dependencies/EDSDK/Dll/EDSDK.dll",
+	"dependencies/EDSDK_64/Dll/EDSDK.dll"
+]

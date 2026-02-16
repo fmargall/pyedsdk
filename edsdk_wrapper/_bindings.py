@@ -18,6 +18,19 @@ ObjectEventHandler = ctypes.WINFUNCTYPE(
     ctypes.c_void_p,
     ctypes.c_void_p)
 
+class DeviceInfo(ctypes.Structure):
+    _fields_ = [
+        ("szPortName"         , ctypes.c_char * 256),
+        ("szDeviceDescription", ctypes.c_char * 256),
+        ("deviceSubType"      , ctypes.c_uint32),
+        ("reserved"           , ctypes.c_uint32)
+    ]
+
+cameraCommand_takePicture = 0x00000000
+cameraCommand_pressShutterButton = 0x00000004
+
+cameraCommand_ShutterButton_OFF = 0x00000000
+cameraCommand_ShutterButton_Completely = 0x00000003
 
 # Defining EdsError EDSAPI EdsInitializeSDK()
 lib.EdsInitializeSDK.restype  = ctypes.c_uint32
@@ -36,8 +49,8 @@ lib.EdsGetCameraList.restype  =  ctypes.c_uint32
 lib.EdsGetCameraList.argtypes = [ctypes.POINTER(CameraListRef)]
 def getCameraList():
     cameraList = CameraListRef()
-    lib.EdsGetCameraList(ctypes.byref(cameraList))
-    return cameraList
+    error = lib.EdsGetCameraList(ctypes.byref(cameraList))
+    return error, cameraList
 
 # Defining EdsError EDSAPI EdsGetChildCount(EdsBaseRef inRef,
 #                                           EdsUInt32* outCount)
@@ -45,8 +58,8 @@ lib.EdsGetChildCount.restype  =  ctypes.c_uint32
 lib.EdsGetChildCount.argtypes = [ctypes.c_void_p, ctypes.POINTER(ctypes.c_uint32)]
 def getChildCount(ref: ctypes.c_void_p):
     count = ctypes.c_uint32()
-    lib.EdsGetChildCount(ref, ctypes.byref(count))
-    return count.value
+    error = lib.EdsGetChildCount(ref, ctypes.byref(count))
+    return error, count.value
 
 # Defining EdsError EDSAPI EdsGetChildAtIndex(EdsBaseRef  inRef,
 #                                             EdsInt32    inIndex,
@@ -55,11 +68,20 @@ lib.EdsGetChildAtIndex.restype  =  ctypes.c_uint32
 lib.EdsGetChildAtIndex.argtypes = [ctypes.c_void_p,
                                    ctypes.c_int32,
                                    ctypes.POINTER(ctypes.c_void_p)]
-def getChildAdIndex(ref  : ctypes.c_void_p, 
-                    index: int) -> ctypes.c_void_p:
+def getChildAtIndex(ref  : ctypes.c_void_p, 
+                    index: int):
     child = ctypes.c_void_p()
-    lib.EdsGetChildAtIndex(ref, ctypes.c_int32(index), ctypes.byref(child))
-    return child
+    error = lib.EdsGetChildAtIndex(ref, ctypes.c_int32(index), ctypes.byref(child))
+    return error, child
+
+# Defining EdsError EDSAPI EdsGetDeviceInfo(EdsCameraRef   inCameraRef,
+#                                           EdsDeviceInfo* outDeviceInfo)
+lib.EdsGetDeviceInfo.restype  = ctypes.c_uint32
+lib.EdsGetDeviceInfo.argtypes = [CameraRef, ctypes.POINTER(DeviceInfo)]
+def getDeviceInfo(camera):
+    deviceInfo = DeviceInfo()
+    error = lib.EdsGetDeviceInfo(camera, ctypes.byref(deviceInfo))
+    return error, deviceInfo
 
 # Defining EdsError EDSAPI EdsOpenSession(EdsCameraRef inCameraRef)
 lib.EdsOpenSession.restype  =  ctypes.c_uint32
@@ -83,9 +105,9 @@ def release(ref: ctypes.c_void_p):
 #                                         EdsCameraCommand inCommand,
 #                                         EdsInt32         inParam)
 lib.EdsSendCommand.restype  =  ctypes.c_uint32
-lib.EdsSendCommand.argtypes = [CameraRef, ctypes.c_uint32, ctypes.c_uint32]
+lib.EdsSendCommand.argtypes = [CameraRef, ctypes.c_uint32, ctypes.c_int32]
 def sendCommand(camera, command, param):
-    return lib.EdsSendCommand(camera, ctypes.c_uint32(command), ctypes.c_uint32(param))
+    return lib.EdsSendCommand(camera, ctypes.c_uint32(command), ctypes.c_int32(param))
 
 # Defining EdsError EDSAPI EdsSetPropertyData(EdsBaseRef     inRef,
 #                                             EdsPropertyID  inPropertyID,
@@ -122,3 +144,6 @@ def setObjectEventHandler(camera, event, handler, context):
                                  callback,
                                  context)
     return callback
+
+# Defining EdsError EDSAPI EdsGetDirectoryItemInfo(EdsDirectoryItemRef   inDirItemRef,
+#                                                  EdsDirectoryItemInfo* outDirItemInfo)

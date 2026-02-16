@@ -7,7 +7,7 @@ name = "edsdk_wrapper"
 version = "0.1.0"
 
 [tool.setuptools.packages.find]
-where = ["edsdk-wrapper"]
+where = ["edsdk_wrapper"]
 
 [tool.setuptools.package-data]
 edsdk_wrapper = [

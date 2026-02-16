@@ -16,4 +16,9 @@ edsdk_wrapper = [
 ]
 
 [project.optional-dependencies]
-dev = ["pytest"]
+dev = ["pytest", "pytest-timeout"]
+
+[tool.pytest.ini_options]
+markers = [
+    "hardware: tests requiring real camera hardware"
+]

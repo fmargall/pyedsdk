@@ -44,6 +44,13 @@ cameraCommand_pressShutterButton = 0x00000004
 cameraCommand_ShutterButton_OFF = 0x00000000
 cameraCommand_ShutterButton_Completely = 0x00000003
 
+fileCreateDisposition_CreateNew        = 0
+fileCreateDisposition_CreateAlways     = 1
+fileCreateDisposition_OpenExisting     = 2
+fileCreateDisposition_OpenAlways       = 3
+fileCreateDisposition_TruncateExisting = 4
+
+
 # Defining EdsError EDSAPI EdsInitializeSDK()
 lib.EdsInitializeSDK.restype  = ctypes.c_uint32
 lib.EdsInitializeSDK.argtypes = []

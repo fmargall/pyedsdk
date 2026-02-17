@@ -166,3 +166,14 @@ def setObjectEventHandler(camera, event, handler, context):
 
 # Defining EdsError EDSAPI EdsGetDirectoryItemInfo(EdsDirectoryItemRef   inDirItemRef,
 #                                                  EdsDirectoryItemInfo* outDirItemInfo)
+lib.EdsGetDirectoryItemInfo.restype  =  ctypes.c_uint32
+lib.EdsGetDirectoryItemInfo.argtypes = [ctypes.c_void_p, ctypes.POINTER(DirectoryItemInfo)]
+def getDirectoryItemInfo(directoryItemRef):
+    info  = DirectoryItemInfo()
+    error = lib.EdsGetDirectoryItemInfo(directoryItemRef, ctypes.byref(info))
+    return error, info
+
+# Defining EdsError EDSAPI EdsCreateFileStream(const EdsChar*                 inFileName,
+#                                                    EdsFileCreateDisposition inCreateDisposition,
+#                                                    EdsAccess                inDesiredAccess,
+#                                                    EdsStreamRef*            outStream)

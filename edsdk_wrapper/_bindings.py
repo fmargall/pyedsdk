@@ -26,6 +26,18 @@ class DeviceInfo(ctypes.Structure):
         ("reserved"           , ctypes.c_uint32)
     ]
 
+class DirectoryItemInfo(ctypes.Structure):
+    _fields_ = [
+        ("size"      , ctypes.c_uint64),
+        ("isFolder"  , ctypes.c_int32),
+        ("groupID"   , ctypes.c_uint32),
+        ("option"    , ctypes.c_uint32),
+        ("szFileName", ctypes.c_char * 256),
+        
+        ("format"  , ctypes.c_uint32),
+        ("dateTime", ctypes.c_uint32)
+    ]
+
 cameraCommand_takePicture = 0x00000000
 cameraCommand_pressShutterButton = 0x00000004
 

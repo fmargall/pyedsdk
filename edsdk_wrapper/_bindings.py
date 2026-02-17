@@ -12,6 +12,8 @@ lib     = ctypes.windll.LoadLibrary(dllPath)
 CameraRef     = ctypes.c_void_p
 CameraListRef = ctypes.c_void_p
 
+StreamRef = ctypes.c_void_p
+
 ObjectEventHandler = ctypes.WINFUNCTYPE(
     ctypes.c_uint32,
     ctypes.c_uint32,

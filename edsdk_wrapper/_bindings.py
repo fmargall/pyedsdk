@@ -50,6 +50,11 @@ fileCreateDisposition_OpenExisting     = 2
 fileCreateDisposition_OpenAlways       = 3
 fileCreateDisposition_TruncateExisting = 4
 
+access_Read      = 0
+access_Write     = 1
+access_ReadWrite = 2
+access_Error     = 0xFFFFFFFF
+
 
 # Defining EdsError EDSAPI EdsInitializeSDK()
 lib.EdsInitializeSDK.restype  = ctypes.c_uint32

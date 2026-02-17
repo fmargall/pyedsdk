@@ -5,6 +5,9 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "edsdk_wrapper"
 version = "0.1.0"
+dependencies = [
+    "pywin32>=306; platform_system == 'Windows'"
+]
 
 [tool.setuptools.packages.find]
 where = ["edsdk_wrapper"]
@@ -14,6 +17,8 @@ edsdk_wrapper = [
 	"dependencies/EDSDK/Dll/EDSDK.dll",
 	"dependencies/EDSDK_64/Dll/EDSDK.dll"
 ]
+
+
 
 [project.optional-dependencies]
 dev = ["pytest", "pytest-timeout"]

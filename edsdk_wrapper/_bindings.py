@@ -184,3 +184,32 @@ def getDirectoryItemInfo(directoryItemRef):
 #                                                    EdsFileCreateDisposition inCreateDisposition,
 #                                                    EdsAccess                inDesiredAccess,
 #                                                    EdsStreamRef*            outStream)
+lib.EdsCreateFileStream.restype  =  ctypes.c_uint32
+lib.EdsCreateFileStream.argtypes = [ctypes.c_char_p, ctypes.c_uint32, ctypes.c_uint32, ctypes.POINTER(StreamRef)]
+def createFileStream(filePath: str):
+    stream = StreamRef()
+
+    error = lib.EdsCreateFileStream(
+        filePath.encode("cp1252"),
+        fileCreateDisposition_CreateAlways,
+        access_Write,
+        ctypes.byref(stream)
+    )
+
+    return error, stream
+
+# Defining EdsError EDSAPI EdsDownload(EdsDirectoryItemRef inDirItemRef,
+#                                      EdsUInt64           inReadSize,
+#                                      EdsStreamRef        outStream)
+lib.EdsDownload.restype  =  ctypes.c_uint32
+lib.EdsDownload.argtypes = [ctypes.c_void_p,
+                            ctypes.c_uint64,
+                            ctypes.c_void_p]
+def download(dirItemRef, size: int, stream):
+    return lib.EdsDownload(dirItemRef, size, stream)
+
+# Defining EdsError EDSAPI EdsDownloadComplete(EdsDirectoryItemRef inDirItemRef)
+lib.EdsDownloadComplete.restype  =  ctypes.c_uint32
+lib.EdsDownloadComplete.argtypes = [ctypes.c_void_p]
+def downloadComplete(dirItemRef):
+    return lib.EdsDownloadComplete(dirItemRef)

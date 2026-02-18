@@ -1,3 +1,5 @@
+import ctypes
+
 from enum import IntEnum
 
 """ctypes return-type hook for Canon EDSDK functions.
@@ -7,8 +9,8 @@ from enum import IntEnum
    checks the returned value and raises a ``CanonError`` if the call
    did not succeed.
 
-   If the return code corresponds to ``ErrorCode.ERR_OK``, the function
-   returns the corresponding ``ErrorCode`` enum value. Otherwise,
+   If the return code corresponds to ``_ErrorCode.ERR_OK``, the function
+   returns the corresponding ``_ErrorCode`` enum value. Otherwise,
    a ``CanonError`` exception is raised.
 
    This mechanism allows transparent error handling without requiring
@@ -21,25 +23,27 @@ from enum import IntEnum
 
    Returns
    -------
-   ErrorCode
-       The corresponding ErrorCode enum value if the call succeeded.
+   _ErrorCode
+       The corresponding _ErrorCode enum value if the call succeeded.
 
    Raises
    ------
    CanonError
-       If the return code is different from ErrorCode.ERR_OK.
+       If the return code is different from _ErrorCode.ERR_OK.
 """
 def _error_restype(code):
-    if int(code) != ErrorCode.ERR_OK:
+    code = ctypes.c_uint32(code).value
+
+    if code != _ErrorCode.ERR_OK:
         raise CanonError(code)
 
-    return ErrorCode(code)
+    return _ErrorCode(code)
 
 
 class CanonError(Exception):
     def __init__(self, code: int):
         try:
-            self.code    = ErrorCode(code)
+            self.code    = _ErrorCode(code)
             self.name    = self.code.name
             self.message = self.code.message
         except ValueError:
@@ -50,7 +54,7 @@ class CanonError(Exception):
         super().__init__(f"[{self.name}] (0x{int(code):08X}) {self.message}")
 
 
-class ErrorCode(IntEnum):
+class _ErrorCode(IntEnum):
     # Error Code Masks
     ISSPECIFIC_MASK  = 0x80000000
     COMPONENTID_MASK = 0x7F000000
@@ -227,151 +231,151 @@ class ErrorCode(IntEnum):
     def message(self) -> str:
         return {
             # General errors
-            ErrorCode.ERR_UNIMPLEMENTED         : "Not implemented"         ,
-            ErrorCode.ERR_INTERNAL_ERROR        : "Internal error"          ,
-            ErrorCode.ERR_MEM_ALLOC_FAILED      : "Memory allocation error" ,
-            ErrorCode.ERR_MEM_FREE_FAILED       : "Memory release error"    ,
-            ErrorCode.ERR_OPERATION_CANCELLED   : "Operation canceled"      ,
-            ErrorCode.ERR_INCOMPATIBLE_VERSION  : "Version error"           ,
-            ErrorCode.ERR_NOT_SUPPORTED         : "Not supported"           ,
-            ErrorCode.ERR_UNEXPECTED_EXCEPTION  : "Unexpected exception"    ,
-            ErrorCode.ERR_PROTECTION_VIOLATION  : "Protection violation"    ,
-            ErrorCode.ERR_MISSING_SUBCOMPONENT  : "Missing subcomponent"    ,
-            ErrorCode.ERR_SELECTION_UNAVAILABLE : "Selection unavailable"   ,
+            _ErrorCode.ERR_UNIMPLEMENTED         : "Not implemented"         ,
+            _ErrorCode.ERR_INTERNAL_ERROR        : "Internal error"          ,
+            _ErrorCode.ERR_MEM_ALLOC_FAILED      : "Memory allocation error" ,
+            _ErrorCode.ERR_MEM_FREE_FAILED       : "Memory release error"    ,
+            _ErrorCode.ERR_OPERATION_CANCELLED   : "Operation canceled"      ,
+            _ErrorCode.ERR_INCOMPATIBLE_VERSION  : "Version error"           ,
+            _ErrorCode.ERR_NOT_SUPPORTED         : "Not supported"           ,
+            _ErrorCode.ERR_UNEXPECTED_EXCEPTION  : "Unexpected exception"    ,
+            _ErrorCode.ERR_PROTECTION_VIOLATION  : "Protection violation"    ,
+            _ErrorCode.ERR_MISSING_SUBCOMPONENT  : "Missing subcomponent"    ,
+            _ErrorCode.ERR_SELECTION_UNAVAILABLE : "Selection unavailable"   ,
 
             # File access errors
-            ErrorCode.ERR_FILE_IO_ERROR            : "IO error"            ,
-            ErrorCode.ERR_FILE_TOO_MANY_OPEN       : "Too many files open" ,
-            ErrorCode.ERR_FILE_NOT_FOUND           : "File does not exist" ,
-            ErrorCode.ERR_FILE_OPEN_ERROR          : "Open error"          ,
-            ErrorCode.ERR_FILE_CLOSE_ERROR         : "Close error"         ,
-            ErrorCode.ERR_FILE_SEEK_ERROR          : "Seek error"          ,
-            ErrorCode.ERR_FILE_TELL_ERROR          : "Tell error"          ,
-            ErrorCode.ERR_FILE_READ_ERROR          : "Read error"          ,
-            ErrorCode.ERR_FILE_WRITE_ERROR         : "Write error"         ,
-            ErrorCode.ERR_FILE_PERMISSION_ERROR    : "Permission error"    ,
-            ErrorCode.ERR_FILE_DISK_FULL_ERROR     : "Disk full"           ,
-            ErrorCode.ERR_FILE_ALREADY_EXISTS      : "File already exists" ,
-            ErrorCode.ERR_FILE_FORMAT_UNRECOGNIZED : "Format error"        ,
-            ErrorCode.ERR_FILE_DATA_CORRUPT        : "Invalid data"        ,
-            ErrorCode.ERR_FILE_NAMING_NA           : "File naming error"   ,
+            _ErrorCode.ERR_FILE_IO_ERROR            : "IO error"            ,
+            _ErrorCode.ERR_FILE_TOO_MANY_OPEN       : "Too many files open" ,
+            _ErrorCode.ERR_FILE_NOT_FOUND           : "File does not exist" ,
+            _ErrorCode.ERR_FILE_OPEN_ERROR          : "Open error"          ,
+            _ErrorCode.ERR_FILE_CLOSE_ERROR         : "Close error"         ,
+            _ErrorCode.ERR_FILE_SEEK_ERROR          : "Seek error"          ,
+            _ErrorCode.ERR_FILE_TELL_ERROR          : "Tell error"          ,
+            _ErrorCode.ERR_FILE_READ_ERROR          : "Read error"          ,
+            _ErrorCode.ERR_FILE_WRITE_ERROR         : "Write error"         ,
+            _ErrorCode.ERR_FILE_PERMISSION_ERROR    : "Permission error"    ,
+            _ErrorCode.ERR_FILE_DISK_FULL_ERROR     : "Disk full"           ,
+            _ErrorCode.ERR_FILE_ALREADY_EXISTS      : "File already exists" ,
+            _ErrorCode.ERR_FILE_FORMAT_UNRECOGNIZED : "Format error"        ,
+            _ErrorCode.ERR_FILE_DATA_CORRUPT        : "Invalid data"        ,
+            _ErrorCode.ERR_FILE_NAMING_NA           : "File naming error"   ,
 
             # Directory errors
-            ErrorCode.ERR_DIR_NOT_FOUND          : "Directory does not exist"                                   ,
-            ErrorCode.ERR_DIR_IO_ERROR           : "I/O error"                                                  ,
-            ErrorCode.ERR_DIR_ENTRY_NOT_FOUND    : "No file in directory"                                       ,
-            ErrorCode.ERR_DIR_ENTRY_EXISTS       : "File in directory"                                          ,
-            ErrorCode.ERR_DIR_NOT_EMPTY          : "Directory full"                                             ,
-            ErrorCode.ERR_PROPERTIES_UNAVAILABLE : "Property (and additional property information) unavailable" ,
-            ErrorCode.ERR_PROPERTIES_MISMATCH    : "Property mismatch"                                          ,
-            ErrorCode.ERR_PROPERTIES_NOT_LOADED  : "Property not loaded"                                        ,
+            _ErrorCode.ERR_DIR_NOT_FOUND          : "Directory does not exist"                                   ,
+            _ErrorCode.ERR_DIR_IO_ERROR           : "I/O error"                                                  ,
+            _ErrorCode.ERR_DIR_ENTRY_NOT_FOUND    : "No file in directory"                                       ,
+            _ErrorCode.ERR_DIR_ENTRY_EXISTS       : "File in directory"                                          ,
+            _ErrorCode.ERR_DIR_NOT_EMPTY          : "Directory full"                                             ,
+            _ErrorCode.ERR_PROPERTIES_UNAVAILABLE : "Property (and additional property information) unavailable" ,
+            _ErrorCode.ERR_PROPERTIES_MISMATCH    : "Property mismatch"                                          ,
+            _ErrorCode.ERR_PROPERTIES_NOT_LOADED  : "Property not loaded"                                        ,
 
             # Function parameter errors
-            ErrorCode.ERR_INVALID_PARAMETER   : "Invalid function parameter" ,
-            ErrorCode.ERR_INVALID_HANDLE      : "Handle error"               ,
-            ErrorCode.ERR_INVALID_POINTER     : "Pointer error"              ,
-            ErrorCode.ERR_INVALID_INDEX       : "Index error"                ,
-            ErrorCode.ERR_INVALID_LENGTH      : "Length error"               ,
-            ErrorCode.ERR_INVALID_FN_POINTER  : "FN pointer error"           ,
-            ErrorCode.ERR_INVALID_SORT_FN     : "Sort FN error"              ,
+            _ErrorCode.ERR_INVALID_PARAMETER   : "Invalid function parameter" ,
+            _ErrorCode.ERR_INVALID_HANDLE      : "Handle error"               ,
+            _ErrorCode.ERR_INVALID_POINTER     : "Pointer error"              ,
+            _ErrorCode.ERR_INVALID_INDEX       : "Index error"                ,
+            _ErrorCode.ERR_INVALID_LENGTH      : "Length error"               ,
+            _ErrorCode.ERR_INVALID_FN_POINTER  : "FN pointer error"           ,
+            _ErrorCode.ERR_INVALID_SORT_FN     : "Sort FN error"              ,
 
             # Device errors
-            ErrorCode.ERR_DEVICE_NOT_FOUND         : "Device not found"               ,
-            ErrorCode.ERR_DEVICE_BUSY              : "Device busy"                    ,
-            ErrorCode.ERR_DEVICE_INVALID           : "Device error"                   ,
-            ErrorCode.ERR_DEVICE_EMERGENCY         : "Device emergency"               ,
-            ErrorCode.ERR_DEVICE_MEMORY_FULL       : "Device memory full"             ,
-            ErrorCode.ERR_DEVICE_INTERNAL_ERROR    : "Internal device error"          ,
-            ErrorCode.ERR_DEVICE_INVALID_PARAMETER : "Device parameter invalid"       ,
-            ErrorCode.ERR_DEVICE_NO_DISK           : "No disk"                        ,
-            ErrorCode.ERR_DEVICE_DISK_ERROR        : "Disk error"                     ,
-            ErrorCode.ERR_DEVICE_CF_GATE_CHANGED   : "The CF gate has been changed"   ,
-            ErrorCode.ERR_DEVICE_DIAL_CHANGED      : "The dial has been changed"      ,
-            ErrorCode.ERR_DEVICE_NOT_INSTALLED     : "Device not installed"           ,
-            ErrorCode.ERR_DEVICE_STAY_AWAKE        : "Device connected in awake mode" ,
-            ErrorCode.ERR_DEVICE_NOT_RELEASED      : "Device not released"            ,
+            _ErrorCode.ERR_DEVICE_NOT_FOUND         : "Device not found"               ,
+            _ErrorCode.ERR_DEVICE_BUSY              : "Device busy"                    ,
+            _ErrorCode.ERR_DEVICE_INVALID           : "Device error"                   ,
+            _ErrorCode.ERR_DEVICE_EMERGENCY         : "Device emergency"               ,
+            _ErrorCode.ERR_DEVICE_MEMORY_FULL       : "Device memory full"             ,
+            _ErrorCode.ERR_DEVICE_INTERNAL_ERROR    : "Internal device error"          ,
+            _ErrorCode.ERR_DEVICE_INVALID_PARAMETER : "Device parameter invalid"       ,
+            _ErrorCode.ERR_DEVICE_NO_DISK           : "No disk"                        ,
+            _ErrorCode.ERR_DEVICE_DISK_ERROR        : "Disk error"                     ,
+            _ErrorCode.ERR_DEVICE_CF_GATE_CHANGED   : "The CF gate has been changed"   ,
+            _ErrorCode.ERR_DEVICE_DIAL_CHANGED      : "The dial has been changed"      ,
+            _ErrorCode.ERR_DEVICE_NOT_INSTALLED     : "Device not installed"           ,
+            _ErrorCode.ERR_DEVICE_STAY_AWAKE        : "Device connected in awake mode" ,
+            _ErrorCode.ERR_DEVICE_NOT_RELEASED      : "Device not released"            ,
 
             # Stream errors
-            ErrorCode.ERR_STREAM_IO_ERROR               : "Stream I/O error"                      ,
-            ErrorCode.ERR_STREAM_NOT_OPEN               : "Stream open error"                     ,
-            ErrorCode.ERR_STREAM_ALREADY_OPEN           : "Stream already open"                   ,
-            ErrorCode.ERR_STREAM_OPEN_ERROR             : "Failed to open stream"                 ,
-            ErrorCode.ERR_STREAM_CLOSE_ERROR            : "Failed to close stream"                ,
-            ErrorCode.ERR_STREAM_SEEK_ERROR             : "Stream seek error"                     ,
-            ErrorCode.ERR_STREAM_TELL_ERROR             : "Stream tell error"                     ,
-            ErrorCode.ERR_STREAM_READ_ERROR             : "Failed to read stream"                 ,
-            ErrorCode.ERR_STREAM_WRITE_ERROR            : "Failed to write stream"                ,
-            ErrorCode.ERR_STREAM_PERMISSION_ERROR       : "Permission error"                      ,
-            ErrorCode.ERR_STREAM_COULDNT_BEGIN_THREAD   : "Could not start reading thumbnail"     ,
-            ErrorCode.ERR_STREAM_BAD_OPTIONS            : "Invalid stream option"                 ,
-            ErrorCode.ERR_STREAM_END_OF_STREAM          : "Invalid stream termination"            ,
+            _ErrorCode.ERR_STREAM_IO_ERROR               : "Stream I/O error"                      ,
+            _ErrorCode.ERR_STREAM_NOT_OPEN               : "Stream open error"                     ,
+            _ErrorCode.ERR_STREAM_ALREADY_OPEN           : "Stream already open"                   ,
+            _ErrorCode.ERR_STREAM_OPEN_ERROR             : "Failed to open stream"                 ,
+            _ErrorCode.ERR_STREAM_CLOSE_ERROR            : "Failed to close stream"                ,
+            _ErrorCode.ERR_STREAM_SEEK_ERROR             : "Stream seek error"                     ,
+            _ErrorCode.ERR_STREAM_TELL_ERROR             : "Stream tell error"                     ,
+            _ErrorCode.ERR_STREAM_READ_ERROR             : "Failed to read stream"                 ,
+            _ErrorCode.ERR_STREAM_WRITE_ERROR            : "Failed to write stream"                ,
+            _ErrorCode.ERR_STREAM_PERMISSION_ERROR       : "Permission error"                      ,
+            _ErrorCode.ERR_STREAM_COULDNT_BEGIN_THREAD   : "Could not start reading thumbnail"     ,
+            _ErrorCode.ERR_STREAM_BAD_OPTIONS            : "Invalid stream option"                 ,
+            _ErrorCode.ERR_STREAM_END_OF_STREAM          : "Invalid stream termination"            ,
 
             # Communication errors
-            ErrorCode.ERR_COMM_PORT_IS_IN_USE        : "Port in use"          ,
-            ErrorCode.ERR_COMM_DISCONNECTED          : "Port disconnected"    ,
-            ErrorCode.ERR_COMM_DEVICE_INCOMPATIBLE   : "Incompatible device"  ,
-            ErrorCode.ERR_COMM_BUFFER_FULL           : "Buffer full"          ,
-            ErrorCode.ERR_COMM_USB_BUS_ERR           : "USB bus error"        ,
+            _ErrorCode.ERR_COMM_PORT_IS_IN_USE        : "Port in use"          ,
+            _ErrorCode.ERR_COMM_DISCONNECTED          : "Port disconnected"    ,
+            _ErrorCode.ERR_COMM_DEVICE_INCOMPATIBLE   : "Incompatible device"  ,
+            _ErrorCode.ERR_COMM_BUFFER_FULL           : "Buffer full"          ,
+            _ErrorCode.ERR_COMM_USB_BUS_ERR           : "USB bus error"        ,
 
             # Camera UI lock/unlock errors
-            ErrorCode.ERR_USB_DEVICE_LOCK_ERROR     : "Failed to lock the UI"   ,
-            ErrorCode.ERR_USB_DEVICE_UNLOCK_ERROR   : "Failed to unlock the UI" ,
+            _ErrorCode.ERR_USB_DEVICE_LOCK_ERROR     : "Failed to lock the UI"   ,
+            _ErrorCode.ERR_USB_DEVICE_UNLOCK_ERROR   : "Failed to unlock the UI" ,
 
             # STI/WIA errors
-            ErrorCode.ERR_STI_UNKNOWN_ERROR          : "Unknown STI"           ,
-            ErrorCode.ERR_STI_INTERNAL_ERROR         : "Internal STI error"    ,
-            ErrorCode.ERR_STI_DEVICE_CREATE_ERROR    : "Device creation error" ,
-            ErrorCode.ERR_STI_DEVICE_RELEASE_ERROR   : "Device release error"  ,
-            ErrorCode.ERR_DEVICE_NOT_LAUNCHED        : "Device startup failed" ,
+            _ErrorCode.ERR_STI_UNKNOWN_ERROR          : "Unknown STI"           ,
+            _ErrorCode.ERR_STI_INTERNAL_ERROR         : "Internal STI error"    ,
+            _ErrorCode.ERR_STI_DEVICE_CREATE_ERROR    : "Device creation error" ,
+            _ErrorCode.ERR_STI_DEVICE_RELEASE_ERROR   : "Device release error"  ,
+            _ErrorCode.ERR_DEVICE_NOT_LAUNCHED        : "Device startup failed" ,
 
             # Other general errors
-            ErrorCode.ERR_ENUM_NA                          : "Enumeration terminated (there was no suitable enumeration item)" ,
-            ErrorCode.ERR_INVALID_FN_CALL                  : "Called in a mode when the function could not be used"            ,
-            ErrorCode.ERR_HANDLE_NOT_FOUND                 : "Handle not found"                                                ,
-            ErrorCode.ERR_INVALID_ID                       : "Invalid ID"                                                      ,
-            ErrorCode.ERR_WAIT_TIMEOUT_ERROR               : "Timeout"                                                         ,
-            ErrorCode.ERR_LAST_GENERIC_ERROR_PLUS_ONE      : "Not used."                                                       ,
+            _ErrorCode.ERR_ENUM_NA                          : "Enumeration terminated (there was no suitable enumeration item)" ,
+            _ErrorCode.ERR_INVALID_FN_CALL                  : "Called in a mode when the function could not be used"            ,
+            _ErrorCode.ERR_HANDLE_NOT_FOUND                 : "Handle not found"                                                ,
+            _ErrorCode.ERR_INVALID_ID                       : "Invalid ID"                                                      ,
+            _ErrorCode.ERR_WAIT_TIMEOUT_ERROR               : "Timeout"                                                         ,
+            _ErrorCode.ERR_LAST_GENERIC_ERROR_PLUS_ONE      : "Not used."                                                       ,
 
             # PTP errors
-            ErrorCode.ERR_SESSION_NOT_OPEN                              : "Session open error"                         ,
-            ErrorCode.ERR_INVALID_TRANSACTIONID                         : "Invalid transaction ID"                     ,
-            ErrorCode.ERR_INCOMPLETE_TRANSFER                           : "Transfer problem"                           ,
-            ErrorCode.ERR_INVALID_STRAGEID                              : "Storage error"                              ,
-            ErrorCode.ERR_DEVICEPROP_NOT_SUPPORTED                      : "Unsupported device property"                ,
-            ErrorCode.ERR_INVALID_OBJECTFORMATCODE                      : "Invalid object format code"                 ,
-            ErrorCode.ERR_SELF_TEST_FAILED                              : "Failed self-diagnosis"                      ,
-            ErrorCode.ERR_PARTIAL_DELETION                              : "Failed in partial deletion"                 ,
-            ErrorCode.ERR_SPECIFICATION_BY_FORMAT_UNSUPPORTED           : "Unsupported format specification"           ,
-            ErrorCode.ERR_NO_VALID_OBJECTINFO                           : "Invalid object information"                 ,
-            ErrorCode.ERR_INVALID_CODE_FORMAT                           : "Invalid code format"                        ,
-            ErrorCode.ERR_UNKNOWN_VENDER_CODE                           : "Unknown vendor code"                        ,
-            ErrorCode.ERR_CAPTURE_ALREADY_TERMINATED                    : "Capture already terminated"                 ,
-            ErrorCode.ERR_INVALID_PARENTOBJECT                          : "Invalid parent object"                      ,
-            ErrorCode.ERR_INVALID_DEVICEPROP_FORMAT                     : "Invalid property format"                    ,
-            ErrorCode.ERR_INVALID_DEVICEPROP_VALUE                      : "Invalid property value"                     ,
-            ErrorCode.ERR_SESSION_ALREADY_OPEN                          : "Session already open"                       ,
-            ErrorCode.ERR_TRANSACTION_CANCELLED                         : "Transaction canceled"                       ,
-            ErrorCode.ERR_SPECIFICATION_OF_DESTINATION_UNSUPPORTED      : "Unsupported destination specification"      ,
-            ErrorCode.ERR_UNKNOWN_COMMAND                               : "Unknown command"                            ,
-            ErrorCode.ERR_OPERATION_REFUSED                             : "Operation refused"                          ,
-            ErrorCode.ERR_LENS_COVER_CLOSE                              : "Lens cover closed"                          ,
-            ErrorCode.ERR_OBJECT_NOTREADY                               : "Image data set not ready for live view"     ,
+            _ErrorCode.ERR_SESSION_NOT_OPEN                              : "Session open error"                         ,
+            _ErrorCode.ERR_INVALID_TRANSACTIONID                         : "Invalid transaction ID"                     ,
+            _ErrorCode.ERR_INCOMPLETE_TRANSFER                           : "Transfer problem"                           ,
+            _ErrorCode.ERR_INVALID_STRAGEID                              : "Storage error"                              ,
+            _ErrorCode.ERR_DEVICEPROP_NOT_SUPPORTED                      : "Unsupported device property"                ,
+            _ErrorCode.ERR_INVALID_OBJECTFORMATCODE                      : "Invalid object format code"                 ,
+            _ErrorCode.ERR_SELF_TEST_FAILED                              : "Failed self-diagnosis"                      ,
+            _ErrorCode.ERR_PARTIAL_DELETION                              : "Failed in partial deletion"                 ,
+            _ErrorCode.ERR_SPECIFICATION_BY_FORMAT_UNSUPPORTED           : "Unsupported format specification"           ,
+            _ErrorCode.ERR_NO_VALID_OBJECTINFO                           : "Invalid object information"                 ,
+            _ErrorCode.ERR_INVALID_CODE_FORMAT                           : "Invalid code format"                        ,
+            _ErrorCode.ERR_UNKNOWN_VENDOR_CODE                           : "Unknown vendor code"                        ,
+            _ErrorCode.ERR_CAPTURE_ALREADY_TERMINATED                    : "Capture already terminated"                 ,
+            _ErrorCode.ERR_INVALID_PARENTOBJECT                          : "Invalid parent object"                      ,
+            _ErrorCode.ERR_INVALID_DEVICEPROP_FORMAT                     : "Invalid property format"                    ,
+            _ErrorCode.ERR_INVALID_DEVICEPROP_VALUE                      : "Invalid property value"                     ,
+            _ErrorCode.ERR_SESSION_ALREADY_OPEN                          : "Session already open"                       ,
+            _ErrorCode.ERR_TRANSACTION_CANCELLED                         : "Transaction canceled"                       ,
+            _ErrorCode.ERR_SPECIFICATION_OF_DESTINATION_UNSUPPORTED      : "Unsupported destination specification"      ,
+            _ErrorCode.ERR_UNKNOWN_COMMAND                               : "Unknown command"                            ,
+            _ErrorCode.ERR_OPERATION_REFUSED                             : "Operation refused"                          ,
+            _ErrorCode.ERR_LENS_COVER_CLOSE                              : "Lens cover closed"                          ,
+            _ErrorCode.ERR_OBJECT_NOTREADY                               : "Image data set not ready for live view"     ,
 
             # TakePicture errors
-            ErrorCode.ERR_TAKE_PICTURE_AF_NG                           : "Focus failed"                                                                      ,
-            ErrorCode.ERR_TAKE_PICTURE_RESERVED                        : "Reserved"                                                                          ,
-            ErrorCode.ERR_TAKE_PICTURE_MIRROR_UP_NG                    : "Currently configuring mirror up"                                                   ,
-            ErrorCode.ERR_TAKE_PICTURE_SENSOR_CLEANING_NG              : "Currently cleaning sensor"                                                         ,
-            ErrorCode.ERR_TAKE_PICTURE_SILENCE_NG                      : "Currently performing silent operations"                                            ,
-            ErrorCode.ERR_TAKE_PICTURE_NO_CARD_NG                      : "Card not installed"                                                                ,
-            ErrorCode.ERR_TAKE_PICTURE_CARD_NG                         : "Error writing to card"                                                             ,
-            ErrorCode.ERR_TAKE_PICTURE_CARD_PROTECT_NG                 : "Card write protected"                                                              ,
-            ErrorCode.ERR_TAKE_PICTURE_MOVIE_CROP_NG                   : "Faild in processing with movie crop"                                               ,
-            ErrorCode.ERR_TAKE_PICTURE_STRBO_CHARGE_NG                 : "Faild in flash off"                                                                ,
-            ErrorCode.ERR_TAKE_PICTURE_NO_LENS_NG                      : "Lens is not attached"                                                              ,
-            ErrorCode.ERR_TAKE_PICTURE_SPECIAL_MOVIE_MODE_NG           : "Movie camera exceeds the limit"                                                    ,
-            ErrorCode.ERR_TAKE_PICTURE_LV_REL_PROHIBIT_MODE_NG         : "Faild in live view preparing taking picture for changing AEmode(Candlelight only)" ,
-            ErrorCode.ERR_TAKE_PICTURE_MOVIE_MODE_NG                   : "Faild in taking still image with getting ready for movie mode"                     ,
-            ErrorCode.ERR_TAKE_PICTURE_RETRUCTED_LENS_NG               : "Retructed lens is retracted"                                                       
+            _ErrorCode.ERR_TAKE_PICTURE_AF_NG                           : "Focus failed"                                                                       ,
+            _ErrorCode.ERR_TAKE_PICTURE_RESERVED                        : "Reserved"                                                                           ,
+            _ErrorCode.ERR_TAKE_PICTURE_MIRROR_UP_NG                    : "Currently configuring mirror up"                                                    ,
+            _ErrorCode.ERR_TAKE_PICTURE_SENSOR_CLEANING_NG              : "Currently cleaning sensor"                                                          ,
+            _ErrorCode.ERR_TAKE_PICTURE_SILENCE_NG                      : "Currently performing silent operations"                                             ,
+            _ErrorCode.ERR_TAKE_PICTURE_NO_CARD_NG                      : "Card not installed"                                                                 ,
+            _ErrorCode.ERR_TAKE_PICTURE_CARD_NG                         : "Error writing to card"                                                              ,
+            _ErrorCode.ERR_TAKE_PICTURE_CARD_PROTECT_NG                 : "Card write protected"                                                               ,
+            _ErrorCode.ERR_TAKE_PICTURE_MOVIE_CROP_NG                   : "Failed in processing with movie crop"                                               ,
+            _ErrorCode.ERR_TAKE_PICTURE_STROBO_CHARGE_NG                : "Failed in flash off"                                                                ,
+            _ErrorCode.ERR_TAKE_PICTURE_NO_LENS_NG                      : "Lens is not attached"                                                               ,
+            _ErrorCode.ERR_TAKE_PICTURE_SPECIAL_MOVIE_MODE_NG           : "Movie camera exceeds the limit"                                                     ,
+            _ErrorCode.ERR_TAKE_PICTURE_LV_REL_PROHIBIT_MODE_NG         : "Failed in live view preparing taking picture for changing AEmode(Candlelight only)" ,
+            _ErrorCode.ERR_TAKE_PICTURE_MOVIE_MODE_NG                   : "Failed in taking still image with getting ready for movie mode"                     ,
+            _ErrorCode.ERR_TAKE_PICTURE_RETRUCTED_LENS_NG               : "Retructed lens is retracted"                                                       
 
         }.get(self, "Unknown Canon SDK error.")

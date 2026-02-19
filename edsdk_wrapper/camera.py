@@ -81,6 +81,9 @@ class EOSCamera:
         self.availableApertureList = [_Aperture(val) for val in availableApertureList]
         self.aperture = self.availableApertureList[-1].f_number
 
+        # Filename (name of the output file)
+        self._filename = "image"
+
 
     def __enter__(self):
         return self
@@ -94,7 +97,7 @@ class EOSCamera:
             itemSize = itemInfo.size
 
             stream = _createFileStream(
-                "image.jpg",
+                self._filename,
                 _FileCreateDisposition._CreateAlways,
                 _Access._Write
             )
@@ -170,10 +173,20 @@ class EOSCamera:
     def noiseReduction(self, noiseReductionValue):
         pass
 
+    @property
+    def filename(self) -> str:
+        return self._filename
+
+    @filename.setter
+    def filename(self, filename: str) -> None:
+        self._filename = filename
 
 
     # --------- End users functions ---------
-    def shot(self):
+    def shot(self, filename: str = None):
+        # Updating filename output, if it is required
+        if filename != None: self.filename = filename 
+
         # Preparing the synchronization event
         self._downloadEvent = threading.Event()
 

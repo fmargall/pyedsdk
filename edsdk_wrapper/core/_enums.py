@@ -392,3 +392,53 @@ class _ShutterSpeed(IntEnum):
             self._1_32000: 1/32000,
         }
         return mapping.get(self, None)
+
+
+class _ISOSpeed(IntEnum):
+    _ISO_Auto   = 0x00000000
+    _ISO_6      = 0x00000028
+    _ISO_12     = 0x00000030
+    _ISO_25     = 0x00000038
+    _ISO_50     = 0x00000040
+    _ISO_100    = 0x00000048
+    _ISO_125    = 0x0000004B
+    _ISO_160    = 0x0000004D
+    _ISO_200    = 0x00000050
+    _ISO_250    = 0x00000053
+    _ISO_320    = 0x00000055
+    _ISO_400    = 0x00000058
+    _ISO_500    = 0x0000005B
+    _ISO_640    = 0x0000005D
+    _ISO_800    = 0x00000060
+    _ISO_1000   = 0x00000063
+    _ISO_1250   = 0x00000065
+    _ISO_1600   = 0x00000068
+    _ISO_2000   = 0x0000006B
+    _ISO_2500   = 0x0000006D
+    _ISO_3200   = 0x00000070
+    _ISO_4000   = 0x00000073
+    _ISO_5000   = 0x00000075
+    _ISO_6400   = 0x00000078
+    _ISO_8000   = 0x0000007B
+    _ISO_10000  = 0x0000007D
+    _ISO_12800  = 0x00000080
+    _ISO_16000  = 0x00000083
+    _ISO_20000  = 0x00000085
+    _ISO_25600  = 0x00000088
+    _ISO_32000  = 0x0000008B
+    _ISO_40000  = 0x0000008D
+    _ISO_51200  = 0x00000090
+    _ISO_64000  = 0x00000093
+    _ISO_80000  = 0x00000095
+    _ISO_102400 = 0x00000098
+    _ISO_204800 = 0x000000A0
+    _ISO_409600 = 0x000000A8
+    _ISO_819200 = 0x000000B0
+
+    @property
+    def value(self) -> float:
+        if self is _ISOSpeed._ISO_Auto:
+            return float("nan")
+
+        # Enum name is always like "_ISO_6400"
+        return float(self.name.split("_")[-1])

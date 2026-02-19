@@ -14,9 +14,9 @@ from .core._functions import _setObjectEventHandler
 
 from .core._types     import _BaseRef
 from .core._types     import _Capacity
-from .core._types     import _Access, _PropertyID, _SaveTo, _CameraCommand, _ObjectEvent, _FileCreateDisposition
+from .core._types     import _Access, _PropertyID, _SaveTo, _CameraCommand, _ObjectEvent, _FileCreateDisposition, _ImageQuality
 
-from .core._enums     import _Aperture, _ShutterSpeed
+from .core._enums     import _Aperture, _ShutterSpeed, _ISOSpeed
 
 from .core._callbacks import _ObjectEventHandler
 from .core._callbacks import _waitForEvent
@@ -81,8 +81,15 @@ class EOSCamera:
         self.availableApertureList = [_Aperture(val) for val in availableApertureList]
         self.aperture = self.availableApertureList[-1].f_number
 
-        # Filename (name of the output file)
-        self._filename = "image"
+        # ISO (set at the minium)
+        availableISOList      = _getPropertyDesc(self._cameraRef, _PropertyID._ISOSpeed).values
+        self.availableISOList = [_ISOSpeed(val) for val in availableISOList]
+        self.isoSpeed = self.availableISOList[-1].value
+
+        # Output file (set initially at RAW, lossless, without compressions)
+        self._filename     = "image.RAW"
+        self._imageQuality = _ImageQuality._LR # RAW
+        _setPropertyData(self._cameraRef, _PropertyID._ImageQuality, 0, _ImageQuality._LR)
 
 
     def __enter__(self):
@@ -126,19 +133,23 @@ class EOSCamera:
         pass
 
     @property
-    def isoSpeed(self):
-        pass
+    def isoSpeed(self) -> float:
+        return _ISOSpeed(_getPropertyData(self._cameraRef, _PropertyID._ISOSpeed, 0)).value
 
     @isoSpeed.setter
-    def isoSpeed(self, isoSpeedValue):
-        pass
+    def isoSpeed(self, isoSpeedValue: float):
+         # Available ISO are discrete. Find the closest available for this camera
+         candidates = [s for s in self.availableISOList if s.value is not float("nan")]
+         isoSpeed   = min(candidates, key= lambda s: abs(math.log2(s.value) - math.log2(isoSpeedValue)))
+
+         _setPropertyData(self._cameraRef, _PropertyID._ISOSpeed, 0, isoSpeed)
 
     @property
     def aperture(self) -> float:
         return _Aperture(_getPropertyData(self._cameraRef, _PropertyID._Av, 0)).f_number
 
     @aperture.setter
-    def aperture(self, apertureFNumber):
+    def aperture(self, apertureFNumber: float):
         # Available aperture are discrete. Find the closest available for this camera
         candidates = [s for s in self.availableApertureList if s.f_number is not None]
         aperture   = min(candidates, key= lambda s: abs(math.log2(s.f_number) - math.log2(apertureFNumber)))

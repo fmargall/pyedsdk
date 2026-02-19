@@ -19,3 +19,4 @@ def test_instance_and_shot():
     camera.aperture = 2.8
     camera.shot()
     print("Aperture:", camera.aperture)
+    print("ISO speed:", camera.isoSpeed)

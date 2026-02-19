@@ -11,6 +11,11 @@ def test_instance_and_shot():
     camera.shot()
     print("Shutter speed:", camera.shutterSpeed)
 
-    camera.shutterSpeed = 1.
+    camera.shutterSpeed = 2.
     camera.shot()
     print("Shutter speed:", camera.shutterSpeed)
+    print("Aperture:", camera.aperture)
+
+    camera.aperture = 2.8
+    camera.shot()
+    print("Aperture:", camera.aperture)

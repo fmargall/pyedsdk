@@ -12,12 +12,11 @@ from .core._functions import _getDirectoryItemInfo, _download, _downloadComplete
 from .core._functions import _createFileStream
 from .core._functions import _setObjectEventHandler
 
-#from .core._functions import _objectEventHandler
-
 from .core._types     import _BaseRef
 from .core._types     import _Capacity
 from .core._types     import _Access, _PropertyID, _SaveTo, _CameraCommand, _ObjectEvent, _FileCreateDisposition
-from .core._types     import _ShutterSpeed
+
+from .core._enums     import _Aperture, _ShutterSpeed
 
 from .core._callbacks import _ObjectEventHandler
 from .core._callbacks import _waitForEvent
@@ -77,6 +76,11 @@ class EOSCamera:
         self.availableShutterSpeedList = [_ShutterSpeed(val) for val in availableShutterSpeedList]
         self.shutterSpeed = self.availableShutterSpeedList[-1].seconds
 
+        # Aperture (set at the minimum)
+        availableApertureList      = _getPropertyDesc(self._cameraRef, _PropertyID._Av).values
+        self.availableApertureList = [_Aperture(val) for val in availableApertureList]
+        self.aperture = self.availableApertureList[-1].f_number
+
 
     def __enter__(self):
         return self
@@ -127,12 +131,16 @@ class EOSCamera:
         pass
 
     @property
-    def aperture(self):
-        pass
+    def aperture(self) -> float:
+        return _Aperture(_getPropertyData(self._cameraRef, _PropertyID._Av, 0)).f_number
 
     @aperture.setter
-    def aperture(self, apertureValue):
-        pass
+    def aperture(self, apertureFNumber):
+        # Available aperture are discrete. Find the closest available for this camera
+        candidates = [s for s in self.availableApertureList if s.f_number is not None]
+        aperture   = min(candidates, key= lambda s: abs(math.log2(s.f_number) - math.log2(apertureFNumber)))
+
+        _setPropertyData(self._cameraRef, _PropertyID._Av, 0, aperture)
 
     @property
     def shutterSpeed(self) -> float:

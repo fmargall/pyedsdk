@@ -3,21 +3,21 @@ import pytest
 import threading
 
 
-from edsdk_wrapper.core.functions import _initializeSDK, _terminateSDK
-from edsdk_wrapper.core.functions import _getCameraList
-from edsdk_wrapper.core.functions import _getChildCount, _getChildAtIndex
-from edsdk_wrapper.core.functions import _getPropertyData, _setPropertyData
-from edsdk_wrapper.core.functions import _release
-from edsdk_wrapper.core.functions import _getDeviceInfo, _openSession, _closeSession, _sendCommand, _setCapacity
-from edsdk_wrapper.core.functions import _getVolumeInfo
-from edsdk_wrapper.core.functions import _setObjectEventHandler
+from edsdk_wrapper.core._functions import _initializeSDK, _terminateSDK
+from edsdk_wrapper.core._functions import _getCameraList
+from edsdk_wrapper.core._functions import _getChildCount, _getChildAtIndex
+from edsdk_wrapper.core._functions import _getPropertyData, _setPropertyData
+from edsdk_wrapper.core._functions import _release
+from edsdk_wrapper.core._functions import _getDeviceInfo, _openSession, _closeSession, _sendCommand, _setCapacity
+from edsdk_wrapper.core._functions import _getVolumeInfo
+from edsdk_wrapper.core._functions import _setObjectEventHandler
 
-from edsdk_wrapper.core.functions import _registerObjectHandler
+from edsdk_wrapper.core._functions import _registerObjectHandler
 
-from edsdk_wrapper.core.types     import _Capacity
-from edsdk_wrapper.core.types     import _PropertyID, _SaveTo, _CameraCommand, _ObjectEvent
+from edsdk_wrapper.core._types     import _Capacity
+from edsdk_wrapper.core._types     import _PropertyID, _SaveTo, _CameraCommand, _ObjectEvent
 
-from edsdk_wrapper.core.callbacks import _waitForEvent
+from edsdk_wrapper.core._callbacks import _waitForEvent
 
 
 @pytest.fixture(scope="session")

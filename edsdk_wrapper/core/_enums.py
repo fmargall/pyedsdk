@@ -442,3 +442,23 @@ class _ISOSpeed(IntEnum):
 
         # Enum name is always like "_ISO_6400"
         return float(self.name.split("_")[-1])
+
+# Autofocus mode
+class _AFMode(IntEnum):
+    _0 = 0
+    _1 = 1
+    _2 = 2
+    _3 = 3
+    
+    _Invalid = 0xFFFFFFFF
+
+    @property
+    def label(self) -> str:
+        mapping = {
+            self._0: "One-Shot AF",
+            self._1: "AI Servo AF",
+            self._2: "AI Focus AF",
+            self._3: "Manual Focus",
+            self._Invalid: "Not valid",
+        }
+        return mapping.get(self, "Unknown")

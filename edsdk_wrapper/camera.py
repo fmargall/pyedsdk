@@ -16,7 +16,7 @@ from .core._types     import _BaseRef
 from .core._types     import _Capacity
 from .core._types     import _Access, _PropertyID, _SaveTo, _CameraCommand, _ObjectEvent, _FileCreateDisposition, _ImageQuality
 
-from .core._enums     import _Aperture, _ShutterSpeed, _ISOSpeed
+from .core._enums     import _Aperture, _ShutterSpeed, _ISOSpeed, _AFMode
 
 from .core._callbacks import _ObjectEventHandler
 from .core._callbacks import _waitForEvent
@@ -194,6 +194,10 @@ class EOSCamera:
     @filename.setter
     def filename(self, filename: str) -> None:
         self._filename = filename
+
+    @property
+    def afMode(self) -> str:
+        return _AFMode(_getPropertyData(self._cameraRef, _PropertyID._AFMode, 0)).label
 
 
     # --------- End users functions ---------

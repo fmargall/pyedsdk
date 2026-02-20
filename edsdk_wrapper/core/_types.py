@@ -154,6 +154,7 @@ class _PropertyID(IntEnum):
     # ------- Capture properties --------
     # Number of properties binded: 3 / 38
     _ISOSpeed = 0x00000402
+    _AFMode   = 0x00000404 # Autofocus
     _Av       = 0x00000405 # Aperture
     _Tv       = 0x00000406 # Shutter speed
 

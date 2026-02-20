@@ -156,6 +156,9 @@ class EOSCamera:
 
         _setPropertyData(self._cameraRef, _PropertyID._Av, 0, aperture)
 
+    def getAvailableApertures(self) -> list:
+        return [val.f_number for val in self.availableApertureList]
+
     @property
     def shutterSpeed(self) -> float:
         return _ShutterSpeed(_getPropertyData(self._cameraRef, _PropertyID._Tv, 0)).seconds

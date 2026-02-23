@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "pyedsdk"
-version = "0.1.0"
+dynamic = ["version"]
 dependencies = [
     "pywin32>=306; platform_system == 'Windows'"
 ]
@@ -19,3 +19,7 @@ dev = ["pytest", "pytest-timeout"]
 markers = [
     "hardware: tests requiring real camera hardware"
 ]
+
+[tool.setuptools-git-versioning]
+enabled = true
+dirty_template = "{tag}"

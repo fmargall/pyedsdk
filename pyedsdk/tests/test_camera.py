@@ -1,7 +1,7 @@
 import pytest
 
 
-from edsdk_wrapper.camera import EOSCamera
+from pyedsdk.camera import EOSCamera
 
 
 @pytest.mark.hardware

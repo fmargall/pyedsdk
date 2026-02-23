@@ -9,8 +9,9 @@ dependencies = [
     "pywin32>=306; platform_system == 'Windows'"
 ]
 
-[tool.setuptools]
-packages = ["pyedsdk"]
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["pyedsdk*"]
 
 [project.optional-dependencies]
 dev = ["pytest", "pytest-timeout"]

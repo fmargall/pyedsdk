@@ -12,10 +12,14 @@ from ._callbacks import _ObjectEventHandler
 
 
 # Chosing and reading correct dll
+"""
 arch = platform.architecture()[0]
 
 dllPath = os.path.join(os.path.dirname(__file__), '../dependencies', 'EDSDK_64' if arch == '64bit' else 'EDSDK', 'Dll', 'EDSDK.dll')
 lib     = ctypes.windll.LoadLibrary(dllPath)
+"""
+from .loader import loadSDKLib
+lib = loadSDKLib()
 
 
 # Number of functions binded: 21 / 56

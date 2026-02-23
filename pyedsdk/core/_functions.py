@@ -22,7 +22,7 @@ from .loader import loadSDKLib
 lib = loadSDKLib()
 
 
-# Number of functions binded: 21 / 56
+# Number of functions binded: 22 / 56
 
 
 # -------- Basic functions --------
@@ -242,7 +242,7 @@ def _createFileStream(filename: str, fileCreateDisposition: _FileCreateDispositi
 
 
 # -------- Event handler registering functions --------
-# Number of functions binded: 1 / 7
+# Number of functions binded: 2 / 7
 
 # Defining EdsError EDSAPI EdsSetObjectEventHandler(EdsCameraRef          inCameraRef, 
 #                                                   EdsObjectEvent        inEvent,           
@@ -253,6 +253,11 @@ lib.EdsSetObjectEventHandler.argtypes = [_CameraRef, ctypes.c_uint32, _ObjectEve
 def _setObjectEventHandler(cameraRef: _CameraRef, objectEvent: _ObjectEvent, handler, context: ctypes.c_void_p) -> None:
     lib.EdsSetObjectEventHandler(cameraRef, ctypes.c_uint32(int(objectEvent)), handler, context)
 
+# Defining EdsError EDSAPI EdsGetEvent()
+lib.EdsGetEvent.restype  =  _error_restype
+lib.EdsGetEvent.argtypes = []
+def _getEvent() -> None:
+    lib.EdsGetEvent()
 
 
 # ----------- Event handlers -----------

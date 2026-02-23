@@ -10,7 +10,7 @@ from .core._functions import _release
 from .core._functions import _openSession, _closeSession, _sendCommand, _setCapacity
 from .core._functions import _getDirectoryItemInfo, _download, _downloadComplete
 from .core._functions import _createFileStream
-from .core._functions import _setObjectEventHandler
+from .core._functions import _setObjectEventHandler, _getEvent
 
 from .core._types     import _BaseRef
 from .core._types     import _Capacity

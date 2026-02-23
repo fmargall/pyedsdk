@@ -44,8 +44,8 @@ jobs:
     runs-on: ubuntu-latest
     
     environment:
-      name: testpypi # Should be testpypi for testing (pypi outside testing)
-      url: https://test.pypi.org/p/pyedsdk # Should be test.pypi.org for testing
+      name: pypi # Should be testpypi for testing
+      url: https://pypi.org/p/pyedsdk # Should be test.pypi.org for testing
 
     permissions:
       id-token: write

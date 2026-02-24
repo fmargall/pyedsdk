@@ -84,7 +84,8 @@ class EOSCamera:
         # ISO (set at the minium)
         availableISOList      = _getPropertyDesc(self._cameraRef, _PropertyID._ISOSpeed).values
         self.availableISOList = [_ISOSpeed(val) for val in availableISOList]
-        self.isoSpeed = self.availableISOList[-1].value
+        self.isoSpeed = min([s for s in self.availableISOList 
+                                     if not math.isnan(s.value)], key=lambda s: s.value).value
 
         # Output file (set initially at RAW, lossless, without compressions)
         self._filename     = "image.RAW"

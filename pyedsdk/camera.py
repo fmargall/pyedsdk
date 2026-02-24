@@ -204,6 +204,10 @@ class EOSCamera:
     def focusPosition(self):
         return _getPropertyData(self._cameraRef, _PropertyID._FocusPosition, 0)
 
+    @focusPosition.setter
+    def focusPosition(self, focusPosition):
+        _setPropertyData(self._cameraRef, _PropertyID._FocusPosition, 0, focusPosition)
+
 
     # --------- End users functions ---------
     def shot(self, filename: str = None):

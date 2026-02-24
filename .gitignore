@@ -4,13 +4,13 @@
 ## Get latest from https://github.com/github/gitignore/blob/main/VisualStudio.gitignore
 
 # Avoid including proprietary Canon-SDK
-edsdk_wrapper/edsdk_wrapper/dependencies/**
+pyedsdk/dependencies/**
 
 # Keep subdirectories
-!edsdk_wrapper/edsdk_wrapper/dependencies/**/
+!pyedsdk/dependencies/**/
 
 # Keep .gitkeep files
-!edsdk_wrapper/edsdk_wrapper/dependencies/**/.gitkeep
+!pyedsdk/dependencies/**/.gitkeep
 
 # User-specific files
 *.rsuser

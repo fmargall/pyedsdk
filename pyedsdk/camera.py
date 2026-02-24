@@ -202,7 +202,7 @@ class EOSCamera:
 
     @property
     def focusPosition(self):
-        return _getPropertyData(self._cameraREF, _PropertyID._FocusPosition, 0)
+        return _getPropertyData(self._cameraRef, _PropertyID._FocusPosition, 0)
 
 
     # --------- End users functions ---------

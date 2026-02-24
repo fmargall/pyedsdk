@@ -200,6 +200,10 @@ class EOSCamera:
     def afMode(self) -> str:
         return _AFMode(_getPropertyData(self._cameraRef, _PropertyID._AFMode, 0)).label
 
+    @property
+    def focusPosition(self):
+        return _getPropertyData(self._cameraREF, _PropertyID._FocusPosition, 0)
+
 
     # --------- End users functions ---------
     def shot(self, filename: str = None):

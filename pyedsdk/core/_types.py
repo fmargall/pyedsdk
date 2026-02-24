@@ -158,6 +158,10 @@ class _PropertyID(IntEnum):
     _Av       = 0x00000405 # Aperture
     _Tv       = 0x00000406 # Shutter speed
 
+    # -------- Limited properties --------
+    # Number of properties binded: 1 / ...
+    _FocusPosition = 0x0100046e
+
 # Save To
 class _SaveTo(IntEnum):
     # ---------- Save-to ----------

@@ -139,7 +139,7 @@ class EOSCamera:
     @isoSpeed.setter
     def isoSpeed(self, isoSpeedValue: float):
          # Available ISO are discrete. Find the closest available for this camera
-         candidates = [s for s in self.availableISOList if s.value is not float("nan")]
+         candidates = [s for s in self.availableISOList if math.isnan(s.value)]
          isoSpeed   = min(candidates, key= lambda s: abs(math.log2(s.value) - math.log2(isoSpeedValue)))
 
          _setPropertyData(self._cameraRef, _PropertyID._ISOSpeed, 0, isoSpeed)

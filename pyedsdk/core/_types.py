@@ -4,7 +4,7 @@ from enum import IntEnum
 
 
 # -------- Reference types --------
-# Number of types binded: 5 / 9
+# Number of types binded: 7 / 9
 
 _BaseRef = ctypes.c_void_p
 
@@ -14,6 +14,8 @@ _VolumeRef        = ctypes.c_void_p
 _DirectoryItemRef = ctypes.c_void_p
 
 _StreamRef        = ctypes.c_void_p
+
+_EvfImageRef      = ctypes.c_void_p
 
 
 # File and Properties Access

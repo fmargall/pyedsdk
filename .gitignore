@@ -5,6 +5,7 @@
 
 # Avoid including proprietary Canon-SDK
 pyedsdk/dependencies/**
+*.dll
 
 # Keep subdirectories
 !pyedsdk/dependencies/**/

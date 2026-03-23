@@ -1,3 +1,4 @@
+from .core.loader import loadSDKLib
 
 from importlib.metadata import version, PackageNotFoundError
 try:

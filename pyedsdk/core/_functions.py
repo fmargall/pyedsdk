@@ -22,7 +22,7 @@ from .loader import loadSDKLib
 lib = loadSDKLib()
 
 
-# Number of functions binded: 24 / 56
+# Number of functions binded: 25 / 56
 
 
 # -------- Basic functions --------
@@ -247,7 +247,7 @@ def _createMemoryStream(bufferSize: int = 0) -> _StreamRef:
 
 
 # -------- Image operating functions --------
-# Number of functions binded: 1 / 5
+# Number of functions binded: 2 / 5
 
 # Defining EdsError EDSAPI EdsCreateEvfImageRef(EdsStreamRef    inStreamRef,
 #					                            EdsEvfImageRef* outEvfImageRef)
@@ -257,6 +257,13 @@ def _createEvfImageRef(streamRef: _StreamRef) -> _EvfImageRef:
     evfImageRef = _EvfImageRef()
     lib.EdsCreateEvfImageRef(streamRef, ctypes.byref(evfImageRef))
     return evfImageRef
+
+# Defining EdsError EDSAPI EdsDownloadEvfImage(EdsCameraRef   inCameraRef,
+#				                               EdsEvfImageRef inEvfImageRef)
+lib.EdsDownloadEvfImage.restype  =  _error_restype
+lib.EdsDownloadEvfImage.argtypes = [_CameraRef, _EvfImageRef]
+def _downloadEvfImage(cameraRef: _CameraRef, evfImageRef: _EvfImageRef) -> None:
+    lib.EdsDownloadEvfImage(cameraRef, evfImageRef)
 
 
 # -------- Event handler registering functions --------

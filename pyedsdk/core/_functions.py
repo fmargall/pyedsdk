@@ -4,7 +4,7 @@ import os
 
 from ._errors    import _error_restype, _ErrorCode
 
-from ._types     import _BaseRef, _CameraListRef, _CameraRef, _VolumeRef, _DirectoryItemRef, _StreamRef
+from ._types     import _BaseRef, _CameraListRef, _CameraRef, _VolumeRef, _DirectoryItemRef, _StreamRef, _EvfImageRef
 from ._types     import _DeviceInfo, _VolumeInfo, _DirectoryItemInfo, _PropertyDesc, _Capacity
 from ._types     import _Access, _CameraCommand, _ObjectEvent, _FileCreateDisposition, _PropertyID
 
@@ -22,7 +22,7 @@ from .loader import loadSDKLib
 lib = loadSDKLib()
 
 
-# Number of functions binded: 23 / 56
+# Number of functions binded: 24 / 56
 
 
 # -------- Basic functions --------
@@ -247,7 +247,16 @@ def _createMemoryStream(bufferSize: int = 0) -> _StreamRef:
 
 
 # -------- Image operating functions --------
-# Number of functions binded: 0 / 5
+# Number of functions binded: 1 / 5
+
+# Defining EdsError EDSAPI EdsCreateEvfImageRef(EdsStreamRef    inStreamRef,
+#					                            EdsEvfImageRef* outEvfImageRef)
+lib.EdsCreateEvfImageRef.restype  =  _error_restype
+lib.EdsCreateEvfImageRef.argtypes = [_StreamRef, ctypes.POINTER(_EvfImageRef)]
+def _createEvfImageRef(streamRef: _StreamRef) -> _EvfImageRef:
+    evfImageRef = _EvfImageRef()
+    lib.EdsCreateEvfImageRef(streamRef, ctypes.byref(evfImageRef))
+    return evfImageRef
 
 
 # -------- Event handler registering functions --------

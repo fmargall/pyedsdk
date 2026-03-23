@@ -13,7 +13,7 @@ from .core._functions import _createFileStream
 from .core._functions import _setObjectEventHandler, _getEvent
 
 from .core._types     import _BaseRef
-from .core._types     import _Capacity
+from .core._types     import _Rational, _Capacity
 from .core._types     import _Access, _PropertyID, _SaveTo, _CameraCommand, _ObjectEvent, _FileCreateDisposition, _ImageQuality
 
 from .core._enums     import _Aperture, _ShutterSpeed, _ISOSpeed, _AFMode
@@ -39,6 +39,8 @@ class EOSCamera:
 
         # Releasing camera list
         _release(cameraListRef)
+
+        _setPropertyData(self._cameraRef, _PropertyID._RegisterFocusEdge, 0, 0x01)
 
         _openSession(self._cameraRef)
         self._isClosed = False
@@ -199,14 +201,6 @@ class EOSCamera:
     @property
     def afMode(self) -> str:
         return _AFMode(_getPropertyData(self._cameraRef, _PropertyID._AFMode, 0)).label
-
-    @property
-    def focusPosition(self):
-        return _getPropertyData(self._cameraRef, _PropertyID._FocusPosition, 0)
-
-    @focusPosition.setter
-    def focusPosition(self, focusPosition):
-        _setPropertyData(self._cameraRef, _PropertyID._FocusPosition, 0, focusPosition)
 
 
     # --------- End users functions ---------

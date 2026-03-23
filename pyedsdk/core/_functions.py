@@ -22,7 +22,7 @@ from .loader import loadSDKLib
 lib = loadSDKLib()
 
 
-# Number of functions binded: 22 / 56
+# Number of functions binded: 23 / 56
 
 
 # -------- Basic functions --------
@@ -219,7 +219,7 @@ def _downloadComplete(directoryItemRef: _DirectoryItemRef) -> None:
     lib.EdsDownloadComplete(directoryItemRef)
 
 # -------- Stream operating functions --------
-# Number of functions binded: 1 / 12
+# Number of functions binded: 2 / 12
 
 # Defining EdsError EDSAPI EdsCreateFileStream(const EdsChar*           inFileName,
 #                                              EdsFileCreateDisposition inCreateDisposition,
@@ -234,6 +234,15 @@ def _createFileStream(filename: str, fileCreateDisposition: _FileCreateDispositi
         ctypes.c_uint32(int(desiredAccess)),
         ctypes.byref(streamRef)
     )
+    return streamRef
+
+# Defining EdsError EDSAPI EdsCreateMemoryStream(EdsUInt64     inBufferSize,
+#                                                EdsStreamRef* outStream)
+lib.EdsCreateMemoryStream.restype  =  _error_restype
+lib.EdsCreateMemoryStream.argtypes = [ctypes.c_uint64, ctypes.POINTER(_StreamRef)]
+def _createMemoryStream(bufferSize: int = 0) -> _StreamRef:
+    streamRef = _StreamRef()
+    lib.EdsCreateMemoryStream(bufferSize, ctypes.byref(streamRef))
     return streamRef
 
 

@@ -23,6 +23,11 @@ class _Access(IntEnum):
     _ReadWrite = 2
     _Error     = 0xFFFFFFFF
 
+class _Rational(ctypes.Structure):
+    _fields_ = [
+        ("numerator"  , ctypes.c_int32),
+        ("denominator", ctypes.c_uint32)
+    ]
 
 class _DeviceInfo(ctypes.Structure):
     _fields_ = [
@@ -152,15 +157,18 @@ class _PropertyID(IntEnum):
     _ImageQuality = 0x00000100
 
     # ------- Capture properties --------
-    # Number of properties binded: 4 / 38
-    _ISOSpeed = 0x00000402
-    _AFMode   = 0x00000404 # Autofocus
-    _Av       = 0x00000405 # Aperture
-    _Tv       = 0x00000406 # Shutter speed
+    # Number of properties binded: 5 / 38
+    _ISOSpeed    = 0x00000402
+    _AFMode      = 0x00000404 # Autofocus
+    _Av          = 0x00000405 # Aperture
+    _Tv          = 0x00000406 # Shutter speed
+    _FocalLength = 0x00000409
 
-    # -------- Limited properties --------
-    # Number of properties binded: 1 / ...
-    _FocusPosition = 0x0100046e
+    # -------- Limited properties -------
+    # Number of properties binded: 3 / 39
+    _RegisterFocusEdge = 0x0100046C 
+    _DriveFocusToEdge  = 0x0100046D
+    _FocusPosition     = 0x0100046E
 
 # Save To
 class _SaveTo(IntEnum):

@@ -50,9 +50,10 @@ class LiveViewStream:
             raise RuntimeError("Live view not started")
 
         # Retry loop (safe)
-        for _ in range(100):
+        for _ in range(750):
             try:
                 _downloadEvfImage(self._camera._cameraRef, self._evfImg)
+                break
             except CanonError as err:
                 if err.code == _ErrorCode.ERR_OBJECT_NOTREADY:
                     continue

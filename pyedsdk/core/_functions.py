@@ -10,16 +10,8 @@ from ._types     import _Access, _CameraCommand, _ObjectEvent, _FileCreateDispos
 
 from ._callbacks import _ObjectEventHandler
 
-
-# Chosing and reading correct dll
-"""
-arch = platform.architecture()[0]
-
-dllPath = os.path.join(os.path.dirname(__file__), '../dependencies', 'EDSDK_64' if arch == '64bit' else 'EDSDK', 'Dll', 'EDSDK.dll')
-lib     = ctypes.windll.LoadLibrary(dllPath)
-"""
-from .loader import loadSDKLib
-lib = loadSDKLib()
+# Reading correct library
+from ._lib import lib
 
 
 # Number of functions binded: 27 / 56

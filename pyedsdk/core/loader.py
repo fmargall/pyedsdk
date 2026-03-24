@@ -2,6 +2,8 @@ import ctypes, os, platform
 
 from pathlib import Path
 
+from ._lib import lib
+
 
 def _defaultSearchPaths() -> list[Path]:
     paths = []
@@ -28,10 +30,14 @@ def loadSDKLib(customPath: str | None = None):
         raise RuntimeError("Canon EDSDK Python binding currently only supports Windows.")
 
     if customPath:
-        return ctypes.windll.LoadLibrary(customPath)
+        realLib = ctypes.windll.LoadLibrary(customPath)
+        lib.load(realLib)
+        return realLib
 
     for path in _defaultSearchPaths():
         if path.exists():
-            return ctypes.windll.LoadLibrary(str(path))
+            realLib = ctypes.windll.LoadLibrary(str(path))
+            lib.load(realLib)
+            return realLib
 
     raise RuntimeError("EDSDK.dll not found.")

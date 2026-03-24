@@ -462,3 +462,10 @@ class _AFMode(IntEnum):
             self._Invalid: "Not valid",
         }
         return mapping.get(self, "Unknown")
+
+
+# EVF Output device (flag)
+class _EvfOutputDevice(IntEnum):
+    _TFT      = 1
+    _PC       = 2
+    _PC_Small = 8

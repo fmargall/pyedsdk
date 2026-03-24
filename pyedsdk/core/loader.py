@@ -34,4 +34,4 @@ def loadSDKLib(customPath: str | None = None):
         if path.exists():
             return ctypes.windll.LoadLibrary(str(path))
 
-    raise RuntimeError("ESDSK.dll not found.")
+    raise RuntimeError("EDSSK.dll not found.")

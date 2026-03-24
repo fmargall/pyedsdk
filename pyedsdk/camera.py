@@ -12,16 +12,16 @@ from .core._functions import _getDirectoryItemInfo, _download, _downloadComplete
 from .core._functions import _createFileStream
 from .core._functions import _setObjectEventHandler, _getEvent
 
-from .core._types     import _BaseRef
-from .core._types     import _Rational, _Capacity
-from .core._types     import _Access, _PropertyID, _SaveTo, _CameraCommand, _ObjectEvent, _FileCreateDisposition, _ImageQuality
+from .core._types      import _BaseRef
+from .core._types      import _Rational, _Capacity
+from .core._types      import _Access, _PropertyID, _SaveTo, _CameraCommand, _ObjectEvent, _FileCreateDisposition, _ImageQuality
 
-from .core._enums     import _Aperture, _ShutterSpeed, _ISOSpeed, _AFMode, _EvfOutputDevice
+from .core._enums      import _Aperture, _ShutterSpeed, _ISOSpeed, _AFMode, _EvfOutputDevice
 
-from .core._callbacks import _ObjectEventHandler
-from .core._callbacks import _waitForEvent
+from .core._callbacks  import _ObjectEventHandler
+from .core._callbacks  import _waitForEvent
 
-from live_view_stream import LiveViewStream
+from .live_view_stream import LiveViewStream
 
 
 class EOSCamera:

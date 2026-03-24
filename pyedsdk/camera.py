@@ -16,15 +16,17 @@ from .core._types     import _BaseRef
 from .core._types     import _Rational, _Capacity
 from .core._types     import _Access, _PropertyID, _SaveTo, _CameraCommand, _ObjectEvent, _FileCreateDisposition, _ImageQuality
 
-from .core._enums     import _Aperture, _ShutterSpeed, _ISOSpeed, _AFMode
+from .core._enums     import _Aperture, _ShutterSpeed, _ISOSpeed, _AFMode, _EvfOutputDevice
 
 from .core._callbacks import _ObjectEventHandler
 from .core._callbacks import _waitForEvent
 
+from live_view_stream import LiveViewStream
+
 
 class EOSCamera:
-    # --------- Init function ---------
 
+    # --------- Init function ---------
     def __init__(self, cameraIndex):
         _SDK._initialize()
 
@@ -98,6 +100,21 @@ class EOSCamera:
     def __enter__(self):
         return self
 
+
+    # --------- Internal functions for live view ---------
+    def _startLiveView(self):
+        # Read current device and add PC flag
+        device  = _getPropertyData(self._cameraRef, _PropertyID._Evf_OutputDevice)
+        device |= _EvfOutputDevice._PC
+
+        _setPropertyData(self._cameraRef, _PropertyID._Evf_OutputDevice, device)
+
+    def _endLiveView(self):
+        # Read current device and remove PC flag
+        device  =  _getPropertyData(self._cameraRef, _PropertyID._Evf_OutputDevice)
+        device &= ~_EvfOutputDevice._PC
+
+        _setPropertyData(self._cameraRef, _PropertyID._Evf_OutputDevice, device)
 
     # --------- Building an object event handler ---------
     def _objectEventHandler(self, event: _ObjectEvent, ref: _BaseRef, context: ctypes.c_void_p) -> int:
@@ -215,6 +232,9 @@ class EOSCamera:
         _waitForEvent(self._downloadEvent)
 
         self._downloadEvent = None
+
+    def liveViewStream(self) -> LiveViewStream:
+        return LiveViewStream(self)
 
     # --------- Exit and closing functions ---------
 

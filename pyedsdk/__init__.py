@@ -1,6 +1,5 @@
 
 from .core.loader import loadSDKLib
-from  camera      import EOSCamera
 
 
 from importlib.metadata import version, PackageNotFoundError

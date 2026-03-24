@@ -101,18 +101,21 @@ class EOSCamera:
 
     # --------- Internal functions for live view ---------
     def _startLiveView(self):
+        # Activate EVF mode for live view
+        _setPropertyData(self._cameraRef, _PropertyID._Evf_Mode, 0, 1)
+
         # Read current device and add PC flag
-        device  = _getPropertyData(self._cameraRef, _PropertyID._Evf_OutputDevice)
+        device  = _getPropertyData(self._cameraRef, _PropertyID._Evf_OutputDevice, 0)
         device |= _EvfOutputDevice._PC
 
-        _setPropertyData(self._cameraRef, _PropertyID._Evf_OutputDevice, device)
+        _setPropertyData(self._cameraRef, _PropertyID._Evf_OutputDevice, 0, device)
 
     def _endLiveView(self):
         # Read current device and remove PC flag
-        device  =  _getPropertyData(self._cameraRef, _PropertyID._Evf_OutputDevice)
+        device  =  _getPropertyData(self._cameraRef, _PropertyID._Evf_OutputDevice, 0)
         device &= ~_EvfOutputDevice._PC
 
-        _setPropertyData(self._cameraRef, _PropertyID._Evf_OutputDevice, device)
+        _setPropertyData(self._cameraRef, _PropertyID._Evf_OutputDevice, 0, device)
 
     # --------- Building an object event handler ---------
     def _objectEventHandler(self, event: _ObjectEvent, ref: _BaseRef, context: ctypes.c_void_p) -> int:

@@ -175,8 +175,9 @@ class _PropertyID(IntEnum):
     _FocalLength = 0x00000409
 
     # --------- EVF properties ----------
-    # Number of properties binded: 1 / 22
+    # Number of properties binded: 2 / 22
     _Evf_OutputDevice = 0x00000500
+    _Evf_Mode         = 0x00000501
 
     # -------- Limited properties -------
     # Number of properties binded: 3 / 39

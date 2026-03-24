@@ -122,6 +122,14 @@ class _ImageQuality(IntEnum):
     _LR = 0x0064FF0F # RAW
 
 
+# Save To
+class _SaveTo(IntEnum):
+    # ---------- Save-to ----------
+    _Camera = 1
+    _Host   = 2
+    _Both   = 3
+
+
 # Camera commands
 class _CameraCommand(IntEnum):
     # --------- Send commands ---------
@@ -166,15 +174,12 @@ class _PropertyID(IntEnum):
     _Tv          = 0x00000406 # Shutter speed
     _FocalLength = 0x00000409
 
+    # --------- EVF properties ----------
+    # Number of properties binded: 1 / 22
+    _Evf_OutputDevice = 0x00000500
+
     # -------- Limited properties -------
     # Number of properties binded: 3 / 39
     _RegisterFocusEdge = 0x0100046C 
     _DriveFocusToEdge  = 0x0100046D
     _FocusPosition     = 0x0100046E
-
-# Save To
-class _SaveTo(IntEnum):
-    # ---------- Save-to ----------
-    _Camera = 1
-    _Host   = 2
-    _Both   = 3

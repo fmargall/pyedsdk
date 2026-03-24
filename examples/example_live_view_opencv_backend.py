@@ -2,7 +2,7 @@
 # to install both openCV and NumPy in order to use it.
 import cv2, numpy as np
 
-from pyedsdk import EOSCamera, loadSDKLib
+from pyedsdk import loadSDKLib
 
 # For intellectual property and licensing reasons, the EDSDK dynamic
 # libraries (EDSDK.dll) are not distributed with this Python package
@@ -12,11 +12,20 @@ from pyedsdk import EOSCamera, loadSDKLib
 pathToDllFile = r"C:\Canon\EDSDK\Dll\EDSDK.dll" # Adapt to your own
 loadSDKLib(pathToDllFile)
 
+from pyedsdk.camera import EOSCamera
+
 # You can initialize your camera by giving to the constructor the
 # current index of the wanted camera. If there is only one camera
 # connected, the index will always be set at 0.
 camera = EOSCamera(0)
 
+# These parameters should be adapted to your current configuration
+camera.shutterSpeed = 1/100
+camera.aperture     = 2.8
+camera.isoSpeed     = 800
+
+# The live view stream is an iterator, and can be called using a
+# for loop, each iteration being a new frame collected by camera
 for frame in camera.liveViewStream():
     # Convert bytes to numpy buffer
     npBuffer = np.frombuffer(frame, dtype=np.uint8)

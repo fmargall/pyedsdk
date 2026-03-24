@@ -42,8 +42,6 @@ class EOSCamera:
         # Releasing camera list
         _release(cameraListRef)
 
-        _setPropertyData(self._cameraRef, _PropertyID._RegisterFocusEdge, 0, 0x01)
-
         _openSession(self._cameraRef)
         self._isClosed = False
 

@@ -234,8 +234,11 @@ class EOSCamera:
 
         self._downloadEvent = None
 
-    def liveViewStream(self) -> LiveViewStream:
-        return LiveViewStream(self)
+    def liveViewStream(self, callback=None, errorCallback=None) -> LiveViewStream:
+        stream = LiveViewStream(self)
+        stream.start(callback=callback, errorCallback=errorCallback)
+
+        return stream
 
     # --------- Exit and closing functions ---------
 

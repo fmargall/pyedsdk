@@ -44,7 +44,7 @@ if __name__ == "__main__":
 
     def onFrame(frame: bytes):
         image = QImage.fromData(frame)
-        sig.frameReady.emit(image.toPixmap())
+        sig.frameReady.emit(QPixmap.fromImage(image))
 
     stream = camera.liveViewStream(callback=onFrame)
 

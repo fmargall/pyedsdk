@@ -4,7 +4,7 @@ import os
 
 from ._errors    import _error_restype, _ErrorCode
 
-from ._types     import _BaseRef, _CameraListRef, _CameraRef, _VolumeRef, _DirectoryItemRef, _StreamRef, _EvfImageRef
+from ._types     import _BaseRef, _CameraListRef, _CameraRef, _VolumeRef, _FlashRef, _DirectoryItemRef, _StreamRef, _EvfImageRef
 from ._types     import _DeviceInfo, _VolumeInfo, _DirectoryItemInfo, _PropertyDesc, _Capacity
 from ._types     import _Access, _CameraCommand, _ObjectEvent, _FileCreateDisposition, _PropertyID
 
@@ -14,7 +14,7 @@ from ._callbacks import _ObjectEventHandler
 from ._lib import lib
 
 
-# Number of functions binded: 27 / 56
+# Number of functions binded: 28 / 56
 
 
 # -------- Basic functions --------
@@ -166,7 +166,7 @@ def _setCapacity(cameraRef: _CameraRef, capacity: _Capacity) -> None:
 
 
 # -------- Volume operating functions --------
-# Number of functions binded: 1 / 4
+# Number of functions binded: 2 / 4
 
 # Defining EdsError EDSAPI EdsGetVolumeInfo(EdsVolumeRef   inVolumeRef,
 #                                           EdsVolumeInfo* outVolumeInfo)
@@ -176,6 +176,15 @@ def _getVolumeInfo(volumeRef: _VolumeRef) -> _VolumeInfo:
     volumeInfo = _VolumeInfo()
     lib.EdsGetVolumeInfo(volumeRef, ctypes.byref(volumeInfo))
     return volumeInfo
+
+# Defining EdsError EDSAPI EdsCreateFlashSettingRef(EdsCameraRef inCameraRef,
+#                                                   EdsFlashRef* outFlashRef)
+lib.EdsCreateFlashSettingRef.restype  =  _error_restype
+lib.EdsCreateFlashSettingRef.argtypes = [_CameraRef, ctypes.POINTER(_FlashRef)]
+def _createFlashSettingRef(cameraRef: _CameraRef) -> _FlashRef:
+    flashRef = _FlashRef()
+    lib.EdsCreateFlashSettingRef(cameraRef, ctypes.byref(flashRef))
+    return flashRef
 
 
 # -------- Directory-item operating functions --------

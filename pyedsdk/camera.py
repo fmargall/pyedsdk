@@ -45,6 +45,9 @@ class EOSCamera:
         _openSession(self._cameraRef)
         self._isClosed = False
 
+        # Stream created when needed
+        self._liveViewStream = None
+
 
         # ----- End of instanciation -----
         # Following code is needed to end initialization correctly
@@ -235,7 +238,11 @@ class EOSCamera:
         self._downloadEvent = None
 
     def liveViewStream(self, callback=None, errorCallback=None) -> LiveViewStream:
+        if self._liveViewStream is not None:
+            self._liveViewStream.stop()
+
         stream = LiveViewStream(self)
+        self._liveViewStream = stream
         stream.start(callback=callback, errorCallback=errorCallback)
 
         return stream
@@ -247,6 +254,14 @@ class EOSCamera:
     # it will be called automatically.
     def _close(self):
         if not self._isClosed:
+            if self._liveViewStream is not None:
+                try:
+                    self._liveViewStream.stop()
+                except Exception as e:
+                    print(f"Error while stopping stream: {e}")
+                finally:
+                    self._liveViewStream = None
+
             _closeSession(self._cameraRef)
             _release(self._cameraRef)
             _SDK._terminate()

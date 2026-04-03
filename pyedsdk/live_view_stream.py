@@ -75,3 +75,13 @@ class LiveViewStream:
                 yield self.getFrame()
         finally:
             self.stop()
+
+
+    def _loop(self, callback):
+        try:
+            while self._running:
+                frame = self.getFrame()
+                callback(frame)
+        except Exception as error:
+            self._running = False
+            print("LiveViewStream loop error:", error)

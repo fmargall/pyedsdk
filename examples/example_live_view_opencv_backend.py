@@ -13,6 +13,8 @@ if __name__ == "__main__":
     pathToDllFile = r"C:\Canon\EDSDK\Dll\EDSDK.dll" # Adapt to your own
     loadSDKLib(pathToDllFile)
 
+    # Note that the EOSCamera import is done after loading SDK library,
+    # as it relies on the SDK functions.
     from pyedsdk.camera import EOSCamera
 
     # You can initialize your camera by giving to the constructor the

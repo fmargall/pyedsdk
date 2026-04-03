@@ -7,7 +7,7 @@ name = "pyedsdk"
 dynamic = ["version"]
 description = "Python binding for the Canon EOS SDK library"
 authors = [
-    { name = "François Margall, email = "fr.margall@proton.me" },
+    { name = "François Margall", email = "fr.margall@proton.me" },
 ]
 dependencies = [
     "pywin32>=306; platform_system == 'Windows'"

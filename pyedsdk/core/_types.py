@@ -186,3 +186,8 @@ class _PropertyID(IntEnum):
     _RegisterFocusEdge = 0x0100046C 
     _DriveFocusToEdge  = 0x0100046D
     _FocusPosition     = 0x0100046E
+
+    # -------- Flash properties ---------
+    # Number of properties binded:  2 / 2
+    _Flash_Firing = 0x0000200D
+    _Flash_Target = 0x0000201E

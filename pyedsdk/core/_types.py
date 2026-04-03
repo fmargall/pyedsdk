@@ -167,12 +167,14 @@ class _PropertyID(IntEnum):
     _ImageQuality = 0x00000100
 
     # ------- Capture properties --------
-    # Number of properties binded: 5 / 38
+    # Number of properties binded: 7 / 38
     _ISOSpeed    = 0x00000402
     _AFMode      = 0x00000404 # Autofocus
     _Av          = 0x00000405 # Aperture
     _Tv          = 0x00000406 # Shutter speed
     _FocalLength = 0x00000409
+    _FlashOn     = 0x00000412
+    _FlashMode   = 0x00000414
 
     # --------- EVF properties ----------
     # Number of properties binded: 2 / 22

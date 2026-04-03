@@ -29,7 +29,12 @@ if __name__ == "__main__":
     window.setCentralWidget(label)
     window.show()
 
+    # You can initialize your camera by giving to the constructor the
+    # current index of the wanted camera. If there is only one camera
+    # connected, the index will always be set at 0.
     camera = EOSCamera(0)
+
+     # These parameters should be adapted to your current configuration
     camera.shutterSpeed = 1/100
     camera.aperture     = 2.8
     camera.isoSpeed     = 800

@@ -6,7 +6,7 @@ from ._errors    import _error_restype, _ErrorCode
 
 from ._types     import _BaseRef, _CameraListRef, _CameraRef, _VolumeRef, _FlashRef, _DirectoryItemRef, _StreamRef, _EvfImageRef
 from ._types     import _DeviceInfo, _VolumeInfo, _DirectoryItemInfo, _PropertyDesc, _Capacity
-from ._types     import _Access, _CameraCommand, _ObjectEvent, _FileCreateDisposition, _PropertyID
+from ._types     import _Access, _CameraCommand, _CameraStatusCommand, _ObjectEvent, _FileCreateDisposition, _PropertyID
 
 from ._callbacks import _ObjectEventHandler
 
@@ -14,7 +14,7 @@ from ._callbacks import _ObjectEventHandler
 from ._lib import lib
 
 
-# Number of functions binded: 28 / 56
+# Number of functions binded: 29 / 56
 
 
 # -------- Basic functions --------
@@ -126,7 +126,7 @@ def _getCameraList() -> _CameraListRef:
 
 
 # -------- Camera operating functions --------
-# Number of functions binded: 5 / 6
+# Number of functions binded: 6 / 6
 
 # Defining EdsError EDSAPI EdsGetDeviceInfo(EdsCameraRef   inCameraRef,
 #                                           EdsDeviceInfo* outDeviceInfo)
@@ -156,6 +156,14 @@ lib.EdsSendCommand.restype  =  _error_restype
 lib.EdsSendCommand.argtypes = [_CameraRef, ctypes.c_uint32, ctypes.c_int32]
 def _sendCommand(cameraRef: _CameraRef, command: _CameraCommand, param: int) -> None:
     lib.EdsSendCommand(cameraRef, ctypes.c_uint32(int(command)),  ctypes.c_int32(param))
+
+# Defining EdsError EDSAPI EdsSendStatusCommand(EdsCameraRef           inCameraRef,
+#                                               EdsCameraStatusCommand inStatusCommand,
+#                                               EdsInt32               inParam)
+lib.EdsSendStatusCommand.restype  =  _error_restype
+lib.EdsSendStatusCommand.argtypes = [_CameraRef, ctypes.c_uint32, ctypes.c_int32]
+def _sendStatusCommand(cameraRef: _CameraRef, statusCommand: _CameraStatusCommand, param: int) -> None:
+    lib.EdsSendStatusCommand(cameraRef, ctypes.c_uint32(int(statusCommand)), ctypes.c_int32(param))
 
 # Defining EdsError EDSAPI EdsSetCapacity(EdsCameraRef inCameraRef,
 #                                         EdsCapacity  inCapacity)

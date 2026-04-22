@@ -8,6 +8,7 @@ from .core._functions import _getChildCount, _getChildAtIndex
 from .core._functions import _getPropertyData, _setPropertyData, _getPropertyDesc
 from .core._functions import _release
 from .core._functions import _openSession, _closeSession, _sendCommand, _setCapacity
+from .core._functions import _createFlashSettingRef
 from .core._functions import _getDirectoryItemInfo, _download, _downloadComplete
 from .core._functions import _createFileStream
 from .core._functions import _setObjectEventHandler, _getEvent
@@ -47,6 +48,9 @@ class EOSCamera:
 
         # Stream created when needed
         self._liveViewStream = None
+
+        # Initialising flash reference
+        self._flashRef = _createFlashSettingRef(self._cameraRef)
 
 
         # ----- End of instanciation -----
@@ -262,6 +266,7 @@ class EOSCamera:
                 finally:
                     self._liveViewStream = None
 
+            _release(self._flashRef)
             _closeSession(self._cameraRef)
             _release(self._cameraRef)
             _SDK._terminate()

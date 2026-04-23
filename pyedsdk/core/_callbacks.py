@@ -3,13 +3,21 @@ import time
 
 from ._errors import _ErrorCode
 from ._types  import _BaseRef
-from ._types  import _ObjectEvent
+from ._types  import _ObjectEvent, _PropertyEvent
 
 
 _ObjectEventHandler = ctypes.WINFUNCTYPE(
     ctypes.c_uint32,   # _ErrorCode
     ctypes.c_uint32,   # _ObjectEvent
     _BaseRef,
+    ctypes.c_void_p
+)
+
+_PropertyEventHandler = ctypes.WINFUNCTYPE(
+    ctypes.c_uint32, # _ErrorCode
+    ctypes.c_uint32, # _PropertyEvent
+    ctypes.c_uint32, # _PropertyID
+    ctypes.c_uint32, # inputParameter
     ctypes.c_void_p
 )
 

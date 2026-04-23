@@ -139,6 +139,15 @@ class _CameraCommand(IntEnum):
 
     _PressShutterButton = 0x00000004
 
+# Shutter button
+class _ShutterButton(IntEnum):
+    # Number of status binded: 5 / 5
+    _OFF              = 0x00000000
+    _Halfway          = 0x00000001
+    _Completely       = 0x00000003
+    _Halfway_NonAF    = 0x00010001
+    _Completely_NonAF = 0x00010003
+
 # Camera Status commands
 class _CameraStatusCommand(IntEnum):
     # Number of status commands binded: 4 / 4

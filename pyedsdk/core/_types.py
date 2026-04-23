@@ -156,15 +156,22 @@ class _CameraStatusCommand(IntEnum):
     _EnterDirectTransfer = 0x00000002
     _ExitDirectTransfer  = 0x00000003
 
+class _PropertyEvent(IntEnum):
+    # Number of events binded: 4 / 4
+    _All                   = 0x00000100
+    _PropertyChanged       = 0x00000101
+    _PropertyDescChanged   = 0x00000102
+    _PropertyDescExChanged = 0x00000110
+
 class _ObjectEvent(IntEnum):
     # Number of events binded: 2 / 13
 
-    # Notifies all object events.
+    # Notifies all object events
     _All = 0x00000200
 
     # Notifies that objects on camera are waiting for transfer
     # It is then mandatory to execute either EdsDownloadCancel
-    # EdsDownload to continue.
+    # EdsDownload to continue
     _DirItemRequestTransfer = 0x00000208
 
 # File create disposition

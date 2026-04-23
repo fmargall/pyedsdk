@@ -134,8 +134,10 @@ class _SaveTo(IntEnum):
 # Camera commands
 class _CameraCommand(IntEnum):
     # --------- Send commands ---------
-    # Number of commands binded: 1 / 15
+    # Number of commands binded: 2 / 15
     _TakePicture = 0x00000000
+
+    _PressShutterButton = 0x00000004
 
 # Camera Status commands
 class _CameraStatusCommand(IntEnum):

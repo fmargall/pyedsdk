@@ -327,7 +327,8 @@ _downloadDoneEvent = None
 # -------- Object Event handler --------
 
 # Internal storage used to avoid GC
-_registeredObjectEventHandlers = []
+_registeredObjectEventHandlers   = []
+_registeredPropertyEventHandlers = []
 
 def _objectEventHandler(event: _ObjectEvent, ref: _BaseRef, context: ctypes.c_void_p) -> _ErrorCode:
     if event == _ObjectEvent._DirItemRequestTransfer:
@@ -362,4 +363,14 @@ def _registerObjectHandler(doneEvent):
     c_handler = _ObjectEventHandler(_objectEventHandler)
     _registeredObjectEventHandlers.append(c_handler)
 
+    return c_handler
+
+def _propertyEventHandler(event: int, propertyID: int, param: int, context: ctypes.c_void_p) -> int:
+    print(f"Property event: event=0x{event:08x} propertyID=0x{propertyID:08x} param=0x{param:08x}")
+    return int(_ErrorCode.ERR_OK)
+
+def _registerPropertyHandler(cameraRef):
+    c_handler = _PropertyEventHandler(_propertyEventHandler)
+    _registeredPropertyEventHandlers.append(c_handler)
+    _setPropertyEventHandler(cameraRef, _PropertyEvent._All, c_handler, None)
     return c_handler

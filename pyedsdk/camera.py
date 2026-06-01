@@ -7,20 +7,20 @@ from .core._functions import _getCameraList
 from .core._functions import _getChildCount, _getChildAtIndex
 from .core._functions import _getPropertyData, _setPropertyData, _getPropertyDesc
 from .core._functions import _release
-from .core._functions import _openSession, _closeSession, _sendCommand, _setCapacity
+from .core._functions import _openSession, _closeSession, _sendCommand, _sendStatusCommand, _setCapacity
 from .core._functions import _createFlashSettingRef
 from .core._functions import _getDirectoryItemInfo, _download, _downloadComplete
 from .core._functions import _createFileStream
-from .core._functions import _setObjectEventHandler, _getEvent
+from .core._functions import _setObjectEventHandler, _setPropertyEventHandler, _getEvent
 
 from .core._types      import _BaseRef
 from .core._types      import _Rational, _Capacity
-from .core._types      import _Access, _PropertyID, _SaveTo, _CameraCommand, _ObjectEvent, _FileCreateDisposition, _ImageQuality
+from .core._types      import _Access, _PropertyID, _SaveTo, _CameraCommand, _ShutterButton, _CameraStatusCommand, _ObjectEvent, _PropertyEvent, _FileCreateDisposition, _ImageQuality
 
 from .core._enums      import _Aperture, _ShutterSpeed, _ISOSpeed, _AFMode, _EvfOutputDevice
 
-from .core._callbacks  import _ObjectEventHandler
-from .core._callbacks  import _waitForEvent
+from .core._callbacks  import _ObjectEventHandler, _PropertyEventHandler
+from .core._callbacks  import _waitForEvent, _pumpWindowsMessages
 
 from .live_view_stream import LiveViewStream
 
@@ -51,7 +51,6 @@ class EOSCamera:
 
         # Initialising flash reference
         self._flashRef = _createFlashSettingRef(self._cameraRef)
-
 
         # ----- End of instanciation -----
         # Following code is needed to end initialization correctly
@@ -95,7 +94,7 @@ class EOSCamera:
         self.availableISOList = [_ISOSpeed(val) for val in availableISOList]
         self.isoSpeed = min([s for s in self.availableISOList 
                                      if not math.isnan(s.value)], key=lambda s: s.value).value
-
+ 
         # Output file (set initially at RAW, lossless, without compressions)
         self._filename     = "image.RAW"
         self._imageQuality = _ImageQuality._LR # RAW

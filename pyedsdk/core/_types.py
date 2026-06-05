@@ -130,6 +130,16 @@ class _SaveTo(IntEnum):
     _Host   = 2
     _Both   = 3
 
+# Mirror lockup state
+class _MirrorLockUpState(IntEnum):
+    _Disable        = 0
+    _Enable         = 1
+    _DuringShooting = 2
+
+# Mirror up setting
+class _MirrorUpSetting(IntEnum):
+    _Off = 0
+    _On  = 1
 
 # Camera commands
 class _CameraCommand(IntEnum):
@@ -209,7 +219,9 @@ class _PropertyID(IntEnum):
     _Evf_Mode         = 0x00000501
 
     # -------- Limited properties -------
-    # Number of properties binded: 3 / 39
+    # Number of properties binded: 5 / 39
+    _MirrorLockUpState = 0x01000421
+    _MirrorUpSetting   = 0x01000438
     _RegisterFocusEdge = 0x0100046C 
     _DriveFocusToEdge  = 0x0100046D
     _FocusPosition     = 0x0100046E

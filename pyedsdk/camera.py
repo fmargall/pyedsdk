@@ -43,6 +43,11 @@ class EOSCamera:
         # Releasing camera list
         _release(cameraListRef)
 
+        # These lines, taken from Canon EDSDK's official documentation
+        # are mandatory if one wants to use the mirror lockup function
+        _setPropertyData(self._cameraRef, 0x01000000, 0x517F095D, _PropertyID._MirrorUpSetting)
+        _setPropertyData(self._cameraRef, 0x01000000, 0x00E13499, _PropertyID._MirrorLockUpState)
+
         _openSession(self._cameraRef)
         self._isClosed = False
 
@@ -197,6 +202,16 @@ class EOSCamera:
         shutterSpeed = min(candidates, key= lambda s: abs(math.log2(s.seconds) - math.log2(valueInSeconds)))
 
         _setPropertyData(self._cameraRef, _PropertyID._Tv, 0, shutterSpeed)
+
+    @property
+    def mirrorLockUp(self) -> bool:
+        return _getPropertyData(self._cameraRef, _PropertyID._MirrorUpSetting, 0) == 1
+
+    @mirrorLockUp.setter
+    def mirrorLockUp(self, mirrorLockUpValue: bool):
+        _setPropertyData(self._cameraRef, _PropertyID._MirrorUpSetting, 0, 1 if mirrorLockUpValue else 0)
+        _sendCommand(self._cameraRef, _CameraCommand._PressShutterButton, _ShutterButton._Completely)
+        _sendCommand(self._cameraRef, _CameraCommand._PressShutterButton, _ShutterButton._OFF)
 
     @property
     def exposureCompensation(self):

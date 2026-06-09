@@ -235,7 +235,11 @@ class EOSCamera:
         # Preparing the synchronization event
         self._downloadEvent = threading.Event()
 
-        _sendCommand(self._cameraRef, _CameraCommand._TakePicture, 0)
+        # Although the command '_CameraCommand._TakePicture' does exist,
+        # it's preferred to use the shutter button command, for instance
+        # when using the mirror lockup, _TakePicture command won't work.
+        _sendCommand(self._cameraRef, _CameraCommand._PressShutterButton, _ShutterButton._Completely)
+        _sendCommand(self._cameraRef, _CameraCommand._PressShutterButton, _ShutterButton._OFF)
         _waitForEvent(self._downloadEvent)
 
         self._downloadEvent = None

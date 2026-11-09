@@ -59,7 +59,7 @@ class _Aperture(IntEnum):
     _Invalid = 0xFFFFFFFF
 
     @property
-    def f_number(self) -> float | None:
+    def f_number(self) -> float:
         if self is self._Invalid:
             return None
 
@@ -303,7 +303,7 @@ class _ShutterSpeed(IntEnum):
         return mapping.get(self, "Unknown")
 
     @property
-    def seconds(self) -> float | None:
+    def seconds(self) -> float:
         if self in {self._Bulb, self._Invalid}:
             return None
 

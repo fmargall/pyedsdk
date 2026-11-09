@@ -25,7 +25,7 @@ def _defaultSearchPaths() -> list[Path]:
     return paths
 
 
-def loadSDKLib(customPath: str | None = None):
+def loadSDKLib(customPath: str):
     if platform.system() != "Windows":
         raise RuntimeError("Canon EDSDK Python binding currently only supports Windows.")
 

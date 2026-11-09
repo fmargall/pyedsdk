@@ -15,7 +15,7 @@ from .core._functions import _setObjectEventHandler, _setPropertyEventHandler, _
 
 from .core._types      import _BaseRef
 from .core._types      import _Rational, _Capacity
-from .core._types      import _Access, _PropertyID, _SaveTo, _CameraCommand, _ShutterButton, _CameraStatusCommand, _ObjectEvent, _PropertyEvent, _FileCreateDisposition, _ImageQuality
+from .core._types      import _Access, _PropertyID, _SaveTo, _CameraCommand, _ShutterButton, _CameraStatusCommand, _ObjectEvent, _PropertyEvent, _FileCreateDisposition, ImageQuality
 
 from .core._enums      import _Aperture, _ShutterSpeed, _ISOSpeed, _AFMode, _EvfOutputDevice
 
@@ -102,8 +102,7 @@ class EOSCamera:
  
         # Output file (set initially at RAW, lossless, without compressions)
         self._filename     = "image.RAW"
-        self._imageQuality = _ImageQuality._LR # RAW
-        _setPropertyData(self._cameraRef, _PropertyID._ImageQuality, 0, _ImageQuality._LR)
+        self.ImageQuality = ImageQuality.LR # RAW
 
 
     def __enter__(self):
@@ -158,11 +157,11 @@ class EOSCamera:
     # --------- Property (getter and setters) functions ---------
     @property
     def imageQuality(self):
-        pass
+        return _ISOSpeed(_getPropertyData(self._cameraRef, _PropertyID._ImageQuality, 0)).value
 
     @imageQuality.setter
-    def imageQuality(self, imageQualityValue):
-        pass
+    def imageQuality(self, imageQualityValue:ImageQuality):
+        _setPropertyData(self._cameraRef, _PropertyID._ImageQuality, 0, imageQualityValue)
 
     @property
     def isoSpeed(self) -> float:
